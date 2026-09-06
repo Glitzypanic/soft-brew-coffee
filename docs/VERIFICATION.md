@@ -1,5 +1,11 @@
 # Verificación — 6 de septiembre de 2026
 
+## Revisión posterior: reflejos del entorno
+
+Se editaron los cuatro mockups y se añadió una segunda iluminación de Colombia para el fondo amarillo de la apertura. Se inspeccionaron los cinco resultados: cuello y base transmiten el color del entorno; se conservan las etiquetas y los acabados metálicos. Se verificó la selección de imagen por contexto y la visualización de los reflejos en la vista previa abierta del usuario. No se modificó el layout.
+
+`npm run check` y `npm run build` correctos; las 10 pruebas existentes volvieron a pasar sobre producción. Revisión local del cambio de componente sin hallazgos. La vista previa del navegador se recargó con los nuevos recursos. Los prompts y la relación de archivos figuran en [ASSETS.md](ASSETS.md); las capturas enlazadas más abajo corresponden a la implementación inicial.
+
 ## Resultado
 
 Implementación local terminada y revisada contra el brief y sus decisiones posteriores. Publicación excluida de esta entrega.

@@ -5,14 +5,27 @@ interface Props {
   origin: string;
   name: string;
   eager?: boolean;
+  context?: 'collection' | 'hero';
   class?: string;
 }
-const { origin, name, eager = false, class: className } = Astro.props;
+const {
+  origin,
+  name,
+  eager = false,
+  context = 'collection',
+  class: className,
+} = Astro.props;
+const lighting: Record<string, string> = {
+  colombia: context === 'hero' ? 'colombia-yellow' : 'colombia-grey',
+  peru: 'peru-yellow',
+  honduras: 'honduras-orange',
+  'costa-rica': 'costa-rica-blue',
+};
 const assets = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/bottle-*.png',
+  '../assets/relit-*.png',
   { eager: true },
 );
-const bottle = assets[`../assets/bottle-${origin}.png`]?.default;
+const bottle = assets[`../assets/relit-${lighting[origin]}.png`]?.default;
 if (!bottle) throw new Error(`Missing bottle asset for ${origin}`);
 ---
 
