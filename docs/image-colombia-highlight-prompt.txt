@@ -1,0 +1,4 @@
+Mode: built-in image_gen
+Target: src/assets/relit-colombia-yellow.png
+Prompt:
+Use case: lighting-weather. Input image 1 is the edit target. Make a precise localized professional product-photo retouch: the broad bright yellow reflection on the image-LEFT upper shoulder and immediately beside the label's upper-left rounded corner looks painted and unnatural. Replace that broad yellow patch/strip with a subtle soft neutral warm-grey specular highlight blending smoothly into dark brown glass, with only a faint narrow yellow ambient rim at the outside edge. No neon yellow stripe adjacent to the label. Keep the realistic yellow transmitted light in the clear neck and bottom glass. Preserve EVERYTHING else: exact 1024x1536 framing, silhouette, bottle size/position, silver metal cap, background, grey-white label, every letter and graphic, and right side lighting. Do not redesign or move any element. This is a small localized highlight correction, not a new rendering.
