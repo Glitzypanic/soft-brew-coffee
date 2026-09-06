@@ -1,0 +1,45 @@
+{
+  "mode": "built-in image_gen",
+  "variants": [
+    {
+      "id": "colombia",
+      "origin": "Colombia",
+      "color": "#D2D2D2",
+      "notes": "Chocolate dulce, caramelo",
+      "cap": "silver aluminum",
+      "varietal": true,
+      "label": "21.07.10",
+      "prompt": "Use case: product-mockup. Create exactly ONE photorealistic catalog product bottle cutout for Soft Brew Coffee. Reference image 1 is the original physical bottle: reproduce its SMALL SHORT 200 ml flattened flask shape with broad flat rectangular front, rounded lower corners, rounded shoulders, very short narrow neck, and a ribbed screw cap. The body has a width roughly half total bottle height. It is NOT a round beer bottle, not a tall beverage bottle. Reference image 2 is the exact typography and label layout reference.\nBottle is upright, completely front-facing, entirely visible, centered, consistent portrait 2:3 canvas with generous transparent margins. Fill clear glass with dark brown cold brew coffee, realistically translucent amber edge highlights, thick clear glass base. Ribbed silver aluminum screw cap. Subtle realistic studio light and crisp label, no scenery or props or floating text. Background MUST be genuinely transparent alpha, not white, not a checkerboard image.\nReproduce the reference label design faithfully: rounded rectangle matte #D2D2D2 label occupying most flat body, QR design upper left, black snowflake cold icon within circular 'Refrigerar - Keep cold' text upper right. Large bold black sans-serif stacked brand text exactly 'SOFT' / 'BREW' / 'COFFEE', with original small pouring kettle and dripper illustration beside first two lines. Then condensed monospaced 'DETALLES' and fine horizontal rules in the bottom information grid. Origin field has small 'ORIGEN' over 'Colombia'. Second adjacent cell has 'VARIETAL' over 'Arábica', as reference. Next row: small 'NOTAS' over exact 'Chocolate dulce, caramelo'. Final row reads '200 ml' and 'Fecha:' with blank date. All text clean, legible, carefully spelled with accents. No additional origin/process/certification claims or extra text. This is an authorized brand product mockup, not a documentary photo. Bottle silhouette and label visual identity are the priority."
+    },
+    {
+      "id": "peru",
+      "origin": "Perú",
+      "color": "#D9D218",
+      "notes": "Avellana tostada, chocolate",
+      "cap": "gold aluminum",
+      "varietal": true,
+      "label": "21.07.43",
+      "prompt": "Use case: product-mockup. Create exactly ONE photorealistic catalog product bottle cutout for Soft Brew Coffee. Reference image 1 is the original physical bottle: reproduce its SMALL SHORT 200 ml flattened flask shape with broad flat rectangular front, rounded lower corners, rounded shoulders, very short narrow neck, and a ribbed screw cap. The body has a width roughly half total bottle height. It is NOT a round beer bottle, not a tall beverage bottle. Reference image 2 is the exact typography and label layout reference.\nBottle is upright, completely front-facing, entirely visible, centered, consistent portrait 2:3 canvas with generous transparent margins. Fill clear glass with dark brown cold brew coffee, realistically translucent amber edge highlights, thick clear glass base. Ribbed gold aluminum screw cap. Subtle realistic studio light and crisp label, no scenery or props or floating text. Background MUST be genuinely transparent alpha, not white, not a checkerboard image.\nReproduce the reference label design faithfully: rounded rectangle matte #D9D218 label occupying most flat body, QR design upper left, black snowflake cold icon within circular 'Refrigerar - Keep cold' text upper right. Large bold black sans-serif stacked brand text exactly 'SOFT' / 'BREW' / 'COFFEE', with original small pouring kettle and dripper illustration beside first two lines. Then condensed monospaced 'DETALLES' and fine horizontal rules in the bottom information grid. Origin field has small 'ORIGEN' over 'Perú'. Second adjacent cell has 'VARIETAL' over 'Arábica', as reference. Next row: small 'NOTAS' over exact 'Avellana tostada, chocolate'. Final row reads '200 ml' and 'Fecha:' with blank date. All text clean, legible, carefully spelled with accents. No additional origin/process/certification claims or extra text. This is an authorized brand product mockup, not a documentary photo. Bottle silhouette and label visual identity are the priority."
+    },
+    {
+      "id": "honduras",
+      "origin": "Honduras",
+      "color": "#FF5A1F",
+      "notes": "Cacao, panela y nuez",
+      "cap": "silver aluminum",
+      "varietal": false,
+      "label": "21.07.10",
+      "prompt": "Use case: product-mockup. Create exactly ONE photorealistic catalog product bottle cutout for Soft Brew Coffee. Reference image 1 is the original physical bottle: reproduce its SMALL SHORT 200 ml flattened flask shape with broad flat rectangular front, rounded lower corners, rounded shoulders, very short narrow neck, and a ribbed screw cap. The body has a width roughly half total bottle height. It is NOT a round beer bottle, not a tall beverage bottle. Reference image 2 is the exact typography and label layout reference.\nBottle is upright, completely front-facing, entirely visible, centered, consistent portrait 2:3 canvas with generous transparent margins. Fill clear glass with dark brown cold brew coffee, realistically translucent amber edge highlights, thick clear glass base. Ribbed silver aluminum screw cap. Subtle realistic studio light and crisp label, no scenery or props or floating text. Background MUST be genuinely transparent alpha, not white, not a checkerboard image.\nReproduce the reference label design faithfully: rounded rectangle matte #FF5A1F label occupying most flat body, QR design upper left, black snowflake cold icon within circular 'Refrigerar - Keep cold' text upper right. Large bold black sans-serif stacked brand text exactly 'SOFT' / 'BREW' / 'COFFEE', with original small pouring kettle and dripper illustration beside first two lines. Then condensed monospaced 'DETALLES' and fine horizontal rules in the bottom information grid. Origin field has small 'ORIGEN' over 'Honduras'. Origin field spans full width; OMIT varietal field entirely and do NOT print Arábica or make any varietal claim. Next row: small 'NOTAS' over exact 'Cacao, panela y nuez'. Final row reads '200 ml' and 'Fecha:' with blank date. All text clean, legible, carefully spelled with accents. No additional origin/process/certification claims or extra text. This is an authorized brand product mockup, not a documentary photo. Bottle silhouette and label visual identity are the priority."
+    },
+    {
+      "id": "costa-rica",
+      "origin": "Costa Rica",
+      "color": "#2455FF",
+      "notes": "Naranja dulce, miel y caramelo",
+      "cap": "silver aluminum",
+      "varietal": false,
+      "label": "21.07.10",
+      "prompt": "Use case: product-mockup. Create exactly ONE photorealistic catalog product bottle cutout for Soft Brew Coffee. Reference image 1 is the original physical bottle: reproduce its SMALL SHORT 200 ml flattened flask shape with broad flat rectangular front, rounded lower corners, rounded shoulders, very short narrow neck, and a ribbed screw cap. The body has a width roughly half total bottle height. It is NOT a round beer bottle, not a tall beverage bottle. Reference image 2 is the exact typography and label layout reference.\nBottle is upright, completely front-facing, entirely visible, centered, consistent portrait 2:3 canvas with generous transparent margins. Fill clear glass with dark brown cold brew coffee, realistically translucent amber edge highlights, thick clear glass base. Ribbed silver aluminum screw cap. Subtle realistic studio light and crisp label, no scenery or props or floating text. Background MUST be genuinely transparent alpha, not white, not a checkerboard image.\nReproduce the reference label design faithfully: rounded rectangle matte #2455FF label occupying most flat body, QR design upper left, black snowflake cold icon within circular 'Refrigerar - Keep cold' text upper right. Large bold black sans-serif stacked brand text exactly 'SOFT' / 'BREW' / 'COFFEE', with original small pouring kettle and dripper illustration beside first two lines. Then condensed monospaced 'DETALLES' and fine horizontal rules in the bottom information grid. Origin field has small 'ORIGEN' over 'Costa Rica'. Origin field spans full width; OMIT varietal field entirely and do NOT print Arábica or make any varietal claim. Next row: small 'NOTAS' over exact 'Naranja dulce, miel y caramelo'. Final row reads '200 ml' and 'Fecha:' with blank date. All text clean, legible, carefully spelled with accents. No additional origin/process/certification claims or extra text. This is an authorized brand product mockup, not a documentary photo. Bottle silhouette and label visual identity are the priority."
+    }
+  ]
+}

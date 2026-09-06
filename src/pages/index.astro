@@ -1,0 +1,217 @@
+---
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+import { Image } from 'astro:assets';
+import Arrow from '../components/Arrow.astro';
+import Bottle from '../components/Bottle.astro';
+import BottleMasks from '../components/BottleMasks.astro';
+import OriginRow from '../components/OriginRow.astro';
+import { origins, instagramUrl } from '../data/origins';
+import pause from '../assets/pause.jpeg';
+import coast from '../assets/coast.jpeg';
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Soft Brew Coffee. Cold brew de especialidad en botellines de 200 ml. Descubre Colombia, Perú, Honduras y Costa Rica."
+    />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#D9D218" />
+    <link rel="icon" type="image/svg+xml" href="/brand/keep-cold.svg" />
+    <title>Soft Brew Coffee — El lado frío del café</title>
+  </head>
+  <body>
+    <BottleMasks />
+    <a class="skip-link mono" href="#contenido">Saltar al contenido</a>
+    <div class="site-frame" id="inicio">
+      <header class="masthead">
+        <a class="wordmark" href="#inicio" aria-label="Soft Brew Coffee, inicio"
+          >SOFT BREW COFFEE</a
+        >
+        <span class="masthead-caption mono"
+          >CAFÉ DE ESPECIALIDAD / COLD BREW</span
+        >
+        <nav class="main-nav mono" aria-label="Navegación principal">
+          <a href="#origenes">LOS ORÍGENES <span aria-hidden="true">↓</span></a>
+          <a href="#lado-frio">EL LADO FRÍO <span aria-hidden="true">↓</span></a
+          >
+        </nav>
+      </header>
+
+      <main id="contenido">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-brand">
+            <p class="mono eyebrow">BUEN CAFÉ. EN FRÍO.</p>
+            <h1 id="hero-title">
+              <span class="sr-only"
+                >Soft Brew Coffee. Cold brew de especialidad.</span
+              ><img
+                src="/brand/soft-brew-coffee.svg"
+                alt=""
+                width="601"
+                height="429"
+                fetchpriority="high"
+              />
+            </h1>
+            <div class="hero-intro">
+              <p>Café de especialidad.<br />Una nueva perspectiva.</p><a
+                href="#origenes"
+                class="round-link"
+                aria-label="Descubrir los cuatro orígenes"
+                ><Arrow direction="down" /></a
+              >
+            </div>
+          </div>
+          <div class="hero-stage">
+            <p class="stage-label mono">CUATRO ORÍGENES.<br />UN LADO FRÍO.</p>
+            <div class="hero-bottles">
+              <Bottle
+                origin="colombia"
+                name="Colombia"
+                eager
+                class="hero-bottle hero-bottle--colombia"
+              /><Bottle
+                origin="peru"
+                name="Perú"
+                eager
+                class="hero-bottle hero-bottle--peru"
+              />
+            </div>
+            <img
+              class="cold-seal"
+              src="/brand/keep-cold.svg"
+              alt="Mantener frío"
+              width="130"
+              height="130"
+            />
+            <span class="stage-volume mono">200 ML / COLD BREW</span>
+          </div>
+        </section>
+
+        <div
+          class="product-band"
+          aria-label="Cold brew de especialidad, 200 ml"
+        >
+          <span>COLD BREW</span><span class="band-symbol" aria-hidden="true"
+            >*</span
+          ><span>ESPECIALIDAD</span><span class="band-volume mono">200 ML</span>
+        </div>
+
+        <section
+          class="collection"
+          id="origenes"
+          aria-labelledby="origins-title"
+        >
+          <div class="collection-index">
+            <div>
+              <p class="mono eyebrow">LA COLECCIÓN / 01—04</p><h2
+                id="origins-title"
+              >
+                Cuatro<br /> orígenes.
+              </h2><p class="collection-description">
+                Un mundo de notas.<br /> Encuentra tu favorito.
+              </p>
+            </div>
+            <nav aria-label="Índice de orígenes" class="origin-nav mono">
+              {
+                origins.map((origin) => (
+                  <a href={`#${origin.id}`}>
+                    <span>{origin.number}</span>
+                    {origin.name}
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                ))
+              }
+            </nav>
+            <Arrow direction="down" class="index-arrow" />
+            <p class="index-footnote mono">
+              SOFT BREW COFFEE<br />CAFÉ DE ESPECIALIDAD
+            </p>
+          </div>
+          <div class="origin-list">
+            {
+              origins.map((origin, index) => (
+                <OriginRow origin={origin} reverse={index % 2 !== 0} />
+              ))
+            }
+          </div>
+        </section>
+
+        <section class="pause" id="lado-frio" aria-labelledby="pause-title">
+          <div class="pause-heading">
+            <p class="mono eyebrow">OTRA PERSPECTIVA</p><h2 id="pause-title">
+              Café de especialidad.<br /><span>Otra forma de disfrutarlo.</span>
+            </h2><Arrow class="pause-arrow" />
+          </div>
+          <div class="pause-photos">
+            <figure class="glass-photo">
+              <Image
+                src={pause}
+                alt="Botellín de Perú junto a un vaso con hielo y una rodaja de cítrico, sobre una mesa de madera"
+                widths={[480, 800, 1200]}
+                sizes="(max-width: 700px) 100vw, 60vw"
+                format="webp"
+                quality={85}
+                loading="lazy"
+              /><figcaption class="mono">
+                <span>01 / UNA PAUSA</span><span>SOFT BREW COFFEE</span>
+              </figcaption>
+            </figure>
+            <figure class="coast-photo">
+              <Image
+                src={coast}
+                alt="Botellín de Colombia en una mano frente al mar"
+                widths={[480, 800, 1000]}
+                sizes="(max-width: 700px) 100vw, 40vw"
+                format="webp"
+                quality={85}
+                loading="lazy"
+              /><figcaption class="mono">
+                <span>02 / SIN PRISA</span><span>AL LADO DEL MAR</span>
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer" id="instagram">
+        <div class="footer-top">
+          <h2>Sigue el lado<br /><span>frío del café.</span></h2><div
+            class="social-block"
+          >
+            {
+              instagramUrl ? (
+                <a
+                  class="instagram-link mono"
+                  href={instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  INSTAGRAM <Arrow />
+                </a>
+              ) : (
+                <span class="instagram-label mono">INSTAGRAM</span>
+              )
+            }<p class="mono">SOFT BREW COFFEE</p>
+          </div>
+        </div>
+        <div class="footer-brand" aria-hidden="true">
+          <span>SOFT BREW</span><span
+            >COFFEE<span class="footer-star">*</span></span
+          >
+        </div>
+        <div class="footer-bottom mono">
+          <span>CAFÉ DE ESPECIALIDAD / 200 ML</span><a href="#inicio"
+            >VOLVER ARRIBA ↑</a
+          >
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

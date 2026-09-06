@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+interface Props {
+  origin: string;
+  name: string;
+  eager?: boolean;
+  class?: string;
+}
+const { origin, name, eager = false, class: className } = Astro.props;
+const assets = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/bottle-*.png',
+  { eager: true },
+);
+const bottle = assets[`../assets/bottle-${origin}.png`]?.default;
+if (!bottle) throw new Error(`Missing bottle asset for ${origin}`);
+---
+
+<span class:list={['bottle', className]}>
+  <Image
+    src={bottle}
+    alt={`Soft Brew Coffee de ${name}, botellín de 200 ml`}
+    style={`clip-path:url(#bottle-mask-${origin})`}
+    widths={[320, 480, 720]}
+    sizes="(max-width: 700px) 65vw, 30vw"
+    format="webp"
+    quality={90}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+  />
+</span>

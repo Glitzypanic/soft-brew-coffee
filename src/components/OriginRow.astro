@@ -1,0 +1,33 @@
+---
+import Bottle from './Bottle.astro';
+import type { Origin } from '../data/origins';
+interface Props {
+  origin: Origin;
+  reverse?: boolean;
+}
+const { origin, reverse = false } = Astro.props;
+---
+
+<article
+  id={origin.id}
+  class:list={['origin', { 'origin--reverse': reverse }]}
+  style={`--origin-color:${origin.color};--origin-ink:${origin.ink}`}
+  aria-labelledby={`${origin.id}-title`}
+>
+  <div class="origin-copy">
+    <div class="origin-topline mono">
+      <span>ORIGEN / {origin.number}</span><span>200 ML</span>
+    </div>
+    <h3 id={`${origin.id}-title`}>{origin.name}</h3>
+    <div class="tasting-notes">
+      <p class="mono eyebrow">NOTAS</p>
+      <ul>{origin.notes.map((note) => <li>{note}</li>)}</ul>
+    </div>
+    <p class="origin-bottom mono">
+      CAFÉ DE ESPECIALIDAD <span aria-hidden="true">↗</span>
+    </p>
+  </div>
+  <div class="origin-image">
+    <Bottle origin={origin.id} name={origin.name} />
+  </div>
+</article>
