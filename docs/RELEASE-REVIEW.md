@@ -1,3 +1,5 @@
+> **Actualización 2026-09-07:** publicación autorizada por el propietario. Notas de Honduras y Costa Rica confirmadas. Instagram se mantiene sin enlace por decisión expresa. Los pendientes anteriores sobre estos puntos quedan cerrados; el resto del documento conserva el historial de trabajo.
+
 # Revisión previa a publicación — 7 de septiembre de 2026
 
 Alcance: sitio completo y cambios posteriores al brief aprobado; revisión de corrección y de cumplimiento del alcance, con un revisor independiente. No se ha publicado ni creado un remoto.

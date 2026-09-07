@@ -12,6 +12,8 @@ import { origins, instagramUrl } from '../data/origins';
 import pause from '../assets/pause.jpeg';
 import coast from '../assets/coast.jpeg';
 import '../styles/global.css';
+const canonical = new URL('/', Astro.site);
+const socialImage = new URL('/social-cover.png', Astro.site);
 ---
 
 <!doctype html>
@@ -23,7 +25,17 @@ import '../styles/global.css';
       name="description"
       content="Soft Brew Coffee. Cold brew de especialidad en botellines de 200 ml. Descubre Colombia, Perú, Honduras y Costa Rica."
     />
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:site_name" content="Soft Brew Coffee" />
+    <meta property="og:title" content="Soft Brew Coffee — El lado frío del café" />
+    <meta property="og:description" content="Cuatro orígenes. Café de especialidad en frío, en botellines de 200 ml." />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:alt" content="Soft Brew Coffee: café de especialidad, una nueva perspectiva." />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="theme-color" content="#D9D218" />
     <link rel="icon" type="image/svg+xml" href="/brand/keep-cold.svg" />
     <title>Soft Brew Coffee — El lado frío del café</title>

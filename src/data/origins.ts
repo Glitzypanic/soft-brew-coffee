@@ -7,7 +7,7 @@ export interface Origin {
   color: string;
   ink: string;
   cap: 'silver' | 'gold';
-  notesStatus: 'label' | 'provisional';
+  notesStatus: 'label' | 'confirmed';
 }
 
 export const origins: Origin[] = [
@@ -42,7 +42,7 @@ export const origins: Origin[] = [
     color: '#FF5A1F',
     ink: '#111111',
     cap: 'silver',
-    notesStatus: 'provisional',
+    notesStatus: 'confirmed',
   },
   {
     id: 'costa-rica',
@@ -53,10 +53,9 @@ export const origins: Origin[] = [
     color: '#2455FF',
     ink: '#FFFFFF',
     cap: 'silver',
-    notesStatus: 'provisional',
+    notesStatus: 'confirmed',
   },
 ];
 
-// Set only after the owner confirms the real account. An absent URL renders text,
-// never a fake link. Publication is a separate, deferred phase.
+// Owner approved publication without an Instagram URL. Keep it as plain text.
 export const instagramUrl: string | null = null;

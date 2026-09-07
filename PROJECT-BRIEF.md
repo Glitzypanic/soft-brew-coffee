@@ -1,3 +1,5 @@
+> **Actualización 2026-09-07:** publicación autorizada por el propietario. Notas de Honduras y Costa Rica confirmadas. Instagram se mantiene sin enlace por decisión expresa. Los pendientes anteriores sobre estos puntos quedan cerrados; el resto del documento conserva el historial de trabajo.
+
 # PROJECT-BRIEF — Soft Brew Coffee
 
 > Implementación local completada el 6 de septiembre de 2026. Este documento conserva el brief y la entrevista como referencia; el estado actual de la entrega, recursos y comprobaciones está en [README.md](README.md), [docs/ASSETS.md](docs/ASSETS.md) y [docs/VERIFICATION.md](docs/VERIFICATION.md). Las referencias inferiores a trabajo futuro describen el estado previo al desarrollo.

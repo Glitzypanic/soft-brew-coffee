@@ -69,7 +69,7 @@ test('keyboard access and accessibility checks pass', async ({ page }) => {
   expect(result.violations).toEqual([]);
 });
 
-test('local preview has no invented Instagram destination or purchase flow', async ({
+test('published site keeps Instagram unlinked and has search metadata', async ({
   page,
 }) => {
   await page.goto('/');
@@ -77,9 +77,11 @@ test('local preview has no invented Instagram destination or purchase flow', asy
   await expect(page.locator('a[href*="instagram.com"]')).toHaveCount(0);
   await expect(page.locator('a[href="#"]')).toHaveCount(0);
   await expect(page.locator('form')).toHaveCount(0);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://soft-brew-coffee.vercel.app/');
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /social-cover\.png$/);
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
     'content',
-    'noindex, nofollow',
+    'index, follow',
   );
 });
 
