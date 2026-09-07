@@ -33,9 +33,11 @@ if (!bottle) throw new Error(`Missing bottle asset for ${origin}`);
   <Image
     src={bottle}
     alt={`Soft Brew Coffee de ${name}, botellín de 200 ml`}
-    style={`clip-path:url(#bottle-mask-${origin})`}
+    style="clip-path:url(#bottle-mask)"
     widths={[320, 480, 720]}
-    sizes="(max-width: 700px) 65vw, 30vw"
+    sizes={context === 'hero'
+      ? '(max-width: 500px) 60vw, (max-width: 700px) 300px, (min-width: 1800px) 558px, 31vw'
+      : '(max-width: 700px) 233px, (max-width: 1050px) 226px, (min-width: 1600px) 306px, 260px'}
     format="webp"
     quality={90}
     loading={eager ? 'eager' : 'lazy'}

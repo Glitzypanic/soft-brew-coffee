@@ -700,6 +700,7 @@ a {
     padding: 13px;
   }
   .hero-stage {
+    padding-bottom: 2rem;
     border-left: 0;
     border-top: var(--line);
   }

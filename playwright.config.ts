@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   use: {
-    baseURL: 'http://127.0.0.1:4322',
+    baseURL: 'http://127.0.0.1:4323',
     trace: 'retain-on-failure',
     launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
       ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH }
@@ -24,8 +24,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run preview',
-    url: 'http://127.0.0.1:4322',
-    reuseExistingServer: !process.env.CI,
+    command: 'npm run build && node scripts/test-preview.mjs',
+    url: 'http://127.0.0.1:4323',
+    reuseExistingServer: false,
   },
 });
