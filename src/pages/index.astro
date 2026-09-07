@@ -2,7 +2,6 @@
 import '@fontsource/jetbrains-mono/latin-400.css';
 import '@fontsource/jetbrains-mono/latin-500.css';
 import { Image } from 'astro:assets';
-import PourIcon from '../components/PourIcon.astro';
 import BrewIcon from '../components/BrewIcon.astro';
 import Arrow from '../components/Arrow.astro';
 import Bottle from '../components/Bottle.astro';
@@ -32,9 +31,7 @@ import '../styles/global.css';
     <BottleMasks />
     <a class="skip-link mono" href="#contenido">Saltar al contenido</a>
     <div class="site-frame" id="inicio">
-      <header class="sticky-header">
-        <a class="compact-brand" href="#inicio" aria-label="Soft Brew Coffee, volver al inicio" inert><PourIcon /></a>
-        <div class="masthead">
+      <header class="masthead">
         <a class="wordmark" href="#inicio" aria-label="Soft Brew Coffee, inicio"
           >SOFT BREW COFFEE</a
         >
@@ -46,7 +43,6 @@ import '../styles/global.css';
           <a href="#lado-frio">EL LADO FRÍO <span aria-hidden="true">↓</span></a
           >
         </nav>
-        </div>
       </header>
 
       <main id="contenido">
@@ -220,35 +216,5 @@ import '../styles/global.css';
         </div>
       </footer>
     </div>
-    <script>
-      const header = document.querySelector<HTMLElement>('.sticky-header')!;
-      const full = header.querySelector<HTMLElement>('.masthead')!;
-      const compact = header.querySelector<HTMLElement>('.compact-brand')!;
-      let previous = window.scrollY;
-      let distance = 0;
-      let collapsed = false;
-      const setCollapsed = (value: boolean) => {
-        collapsed = value;
-        header.classList.toggle('is-compact', value);
-        full.inert = value;
-        compact.inert = !value;
-      };
-      window.addEventListener('scroll', () => {
-        const current = Math.max(0, window.scrollY);
-        const delta = current - previous;
-        distance = Math.sign(delta) === Math.sign(distance) ? distance + delta : delta;
-        if (current < 80) setCollapsed(false);
-        else if (distance > 14 && !full.querySelector(':focus-visible')) setCollapsed(true);
-        else if (distance < -14) setCollapsed(false);
-        previous = current;
-      }, { passive: true });
-      header.addEventListener('keydown', (event) => {
-        if (collapsed && event.key === 'Tab') {
-          setCollapsed(false);
-          full.querySelector<HTMLElement>('a')?.focus();
-          event.preventDefault();
-        }
-      });
-    </script>
   </body>
 </html>

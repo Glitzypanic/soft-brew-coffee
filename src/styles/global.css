@@ -20,7 +20,7 @@
 }
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 9rem;
+  scroll-padding-top: 1rem;
 }
 body {
   margin: 0;
@@ -898,30 +898,6 @@ a {
   }
 }
 
-.sticky-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  pointer-events: none;
-}
-.sticky-header .masthead {
-  background: var(--grey);
-  pointer-events: auto;
-}
-.compact-brand {
-  position: absolute;
-  inset: 0 0 auto;
-  height: 64px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--grey);
-  border-bottom: var(--line);
-  visibility: hidden;
-}
-.compact-brand svg { width: 31px; height: 46px; }
-.is-compact .masthead { visibility: hidden; pointer-events: none; }
-.is-compact .compact-brand { visibility: visible; pointer-events: auto; }
 .product-band { justify-content: center; gap: clamp(1rem, 5vw, 6rem); }
 @media (max-width: 700px) {
   .product-band { gap: clamp(0.65rem, 3vw, 1.5rem); }
