@@ -1,0 +1,23 @@
+{
+  "mode": "built-in image_gen",
+  "master": "src/assets/relit-peru-yellow.png",
+  "edits": [
+    {
+      "asset": "src/assets/relit-colombia-grey.png",
+      "prompt": "Edit THIS exact Peru photograph, preserving pixel-exact bottle silhouette, body shape, shoulder curvature, cap geometry, crop, position and dimensions. Do not redraw the bottle. Only recolor its gold cap to silver, recolor yellow label to grey-white, change the word Perú to Colombia, and replace Avellana tostada, Chocolate with Chocolate dulce, Caramelo.  Retain all other logo graphics and text unchanged. Replace yellow backdrop with grey #D2D2D2 and yellow transmitted glass reflections with subtle grey #D2D2D2 light. Preserve neutral soft shoulder highlight. Output 1024x1536 identical bottle bounds as input."
+    },
+    {
+      "asset": "src/assets/relit-colombia-yellow.png",
+      "prompt": "Edit product mockup. Image 1 is the MASTER BOTTLE and edit target: Peru. Preserve its exact body, rounded shoulders, neck, glass base, cap geometry, silhouette, scale and position on 1024x1536 canvas. Image 2 is ONLY a label artwork reference for Colombia; do not use its bottle geometry. Change master bottle's gold cap to realistic SILVER metal of identical shape. Replace its yellow label with the grey-white Colombia label artwork from image2, preserving all its typography, logo, QR and cold seal. Origin text Colombia; notes Chocolate dulce, Caramelo; 200 ml. Background yellow #D9D218; realistic subtle yellow #D9D218 transmission through clear neck and base and subtle edge reflections, with soft neutral shoulder highlights, no harsh colored painted stripes. Brown coffee remains dark brown. Absolutely same silhouette and proportions as image1. One upright bottle, same framing and pixel placement as image1."
+    },
+    {
+      "asset": "src/assets/relit-honduras-orange.png",
+      "prompt": "Edit THIS exact Peru photograph, preserving pixel-exact bottle silhouette, body shape, shoulder curvature, cap geometry, crop, position and dimensions. Do not redraw the bottle. Only recolor its gold cap to silver, recolor yellow label to orange #FF5A1F, change the word Perú to Honduras, and replace Avellana tostada, Chocolate with Cacao, panela y nuez. Remove the VARIETAL heading and its column divider; make origin field full width. Retain all other logo graphics and text unchanged. Replace yellow backdrop with orange #FF5A1F and yellow transmitted glass reflections with subtle orange #FF5A1F light. Preserve neutral soft shoulder highlight. Output 1024x1536 identical bottle bounds as input."
+    },
+    {
+      "asset": "src/assets/relit-costa-rica-blue.png",
+      "prompt": "Edit THIS exact Peru photograph, preserving pixel-exact bottle silhouette, body shape, shoulder curvature, cap geometry, crop, position and dimensions. Do not redraw the bottle. Only recolor its gold cap to silver, recolor yellow label to blue #2455FF, change the word Perú to Costa Rica, and replace Avellana tostada, Chocolate with Naranja dulce, miel y caramelo.  Retain all other logo graphics and text unchanged. Replace yellow backdrop with blue #2455FF and yellow transmitted glass reflections with subtle blue #2455FF light. Preserve neutral soft shoulder highlight. Output 1024x1536 identical bottle bounds as input."
+    }
+  ],
+  "finalCorrection": "Precise localized label edit only. Remove the VARIETAL heading, Arábica text and the vertical divider immediately left of these words, leaving the ORIGEN / Costa Rica field full width. Do not change anything else, preserve exact bottle body, silhouette, silver cap, blue color, all remaining text and artwork, 1024x1536 framing."
+}
