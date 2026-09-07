@@ -546,7 +546,7 @@ a {
   font-size: clamp(4rem, 15.4vw, 17.5rem);
   font-weight: 750;
   line-height: 0.86;
-  letter-spacing: -0.075em;
+  letter-spacing: -0.035em;
   display: flex;
   flex-direction: column;
 }
