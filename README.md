@@ -2,8 +2,6 @@
 
 # Soft Brew Coffee
 
-**Buen café. En frío.**
-
 Una landing editorial para una bebida de café de especialidad: cuatro orígenes, una misma forma de disfrutar el lado frío del café.
 
 [![Verify](https://github.com/Glitzypanic/soft-brew-coffee/actions/workflows/verify.yml/badge.svg)](https://github.com/Glitzypanic/soft-brew-coffee/actions/workflows/verify.yml)
@@ -33,8 +31,6 @@ Una landing editorial para una bebida de café de especialidad: cuatro orígenes
 | Honduras | Cacao, panela, nuez | 26 h | Naranja · plata |
 | Costa Rica | Naranja dulce, miel, caramelo | 24 h | Azul · plata |
 
-Todos los botellines son de **200 ml**. Los mockups comparten cuerpo y proporciones, con reflejos adaptados al entorno. Las notas fueron confirmadas por el responsable del proyecto; las imágenes son representaciones visuales de producto.
-
 ## Diseño
 
 - Identidad tipográfica protagonista y retícula editorial con líneas finas.
@@ -49,8 +45,6 @@ Todos los botellines son de **200 ml**. Los mockups comparten cuerpo y proporcio
 ## Tecnología
 
 **Astro 7 · TypeScript · CSS a medida · Fontsource · Playwright · axe-core**
-
-Sitio estático: no necesita backend, base de datos, credenciales ni servicios de terceros para renderizar. No incluye carrito, formularios o analítica. Instagram permanece como texto sin enlace por decisión del propietario.
 
 ## Desarrollo local
 
@@ -79,54 +73,6 @@ Abrir `http://127.0.0.1:4322`.
 npx playwright install chromium
 npm run verify
 ```
-
-En Linux puede usarse Chromium instalado:
-
-```bash
-PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run verify
-```
-
-Las 10 pruebas cubren navegación, carga de imágenes, teclado, reglas automáticas de accesibilidad, anchos de 320 a 1920 px, texto al 200 %, movimiento reducido y metadatos públicos. Playwright genera una compilación nueva y usa un servidor exclusivo en el puerto **4323**. GitHub Actions ejecuta las mismas comprobaciones en cada push a `main` y pull request.
-
-Las pruebas automáticas no sustituyen una revisión manual completa de accesibilidad. La validación actual usa Chromium; Safari e iPhone físico no han sido verificados.
-
-## Estructura
-
-```text
-src/
-  assets/        Fotografías y mockups de producto
-  components/    Botellines, iconos y fichas de origen
-  data/          Contenido de la colección
-  pages/         Página principal
-  styles/        Diseño y responsive
-public/
-  brand/         Identidad original en SVG
-  licenses/      Licencias de fuentes
-  social-cover.* Portada para compartir
-scripts/         Vista previa aislada para pruebas
-tests/           Pruebas de navegador
-.github/         Verificación automática y plantillas
-docs/            Procedencia, revisiones y decisiones
-```
-
-## Editar contenido
-
-Los orígenes, notas, tiempos de infusión y tapas viven en [`src/data/origins.ts`](src/data/origins.ts). La composición está en [`src/pages/index.astro`](src/pages/index.astro) y [`src/styles/global.css`](src/styles/global.css). La procedencia de los recursos se documenta en [ASSETS.md](docs/ASSETS.md).
-
-## Publicación
-
-Publicado en **[soft-brew-coffee.vercel.app](https://soft-brew-coffee.vercel.app)** mediante Vercel, con `npm ci`, `npm run build` y salida `dist/`. `vercel.json` declara Astro como framework. La URL canónica, el sitemap y los metadatos sociales apuntan al dominio gratuito del proyecto. No necesita variables secretas en producción. El primer despliegue se realizó mediante el conector de Vercel; los pushes ejecutan pruebas pero aún no despliegan automáticamente. [Detalles del despliegue](docs/DEPLOYMENT.md).
-
-Para cambiar la URL pública, actualizar `astro.config.mjs`, `public/robots.txt`, `public/sitemap.xml`, la expectativa canónica en las pruebas y los enlaces de este README. El sitio se sirve desde la raíz del dominio.
-
-## Documentación
-
-- [Brief y decisiones de diseño](PROJECT-BRIEF.md)
-- [Publicación y mantenimiento](docs/DEPLOYMENT.md)
-- [Revisión previa a publicación](docs/RELEASE-REVIEW.md)
-- [Procedencia de imágenes y tipografías](docs/ASSETS.md)
-- [Historial de cambios](CHANGELOG.md)
-- [Cómo contribuir](CONTRIBUTING.md)
 
 ## Recursos y derechos
 
