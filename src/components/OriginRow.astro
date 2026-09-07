@@ -23,6 +23,7 @@ const { origin, reverse = false } = Astro.props;
       <p class="mono eyebrow">NOTAS</p>
       <ul>{origin.notes.map((note) => <li>{note}</li>)}</ul>
     </div>
+    <p class="infusion-time mono">TIEMPO DE INFUSIÓN<br /><strong>{origin.infusionHours} HORAS</strong></p>
     <p class="origin-bottom mono">
       CAFÉ DE ESPECIALIDAD <span aria-hidden="true">↗</span>
     </p>

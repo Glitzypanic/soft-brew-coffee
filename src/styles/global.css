@@ -279,8 +279,16 @@ a {
 }
 .band-symbol {
   color: var(--yellow);
-  font-size: 1.2em;
-  line-height: 0.8;
+  width: 0.8em;
+  flex-shrink: 0;
+}
+.infusion-time {
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+}
+.infusion-time strong {
+  font-size: 1rem;
+  font-weight: 500;
 }
 .band-volume {
   font-size: 1rem;
@@ -695,7 +703,7 @@ a {
     border-top: var(--line);
   }
   .hero-bottles {
-    height: 480px;
+    height: 560px;
     min-height: 0;
     max-width: 500px;
     margin: auto;
@@ -705,7 +713,7 @@ a {
     height: auto;
   }
   .hero-bottle--colombia {
-    top: 0;
+    top: 80px;
     left: 0;
   }
   .hero-bottle--peru {
