@@ -115,13 +115,14 @@ Los orígenes, notas, tiempos de infusión y tapas viven en [`src/data/origins.t
 
 ## Publicación
 
-Preparado para **Vercel**, con `npm ci`, `npm run build` y salida `dist/`. `vercel.json` declara Astro como framework. La URL canónica, el sitemap y los metadatos sociales apuntan al dominio gratuito del proyecto. No necesita variables secretas en producción.
+Publicado en **[soft-brew-coffee.vercel.app](https://soft-brew-coffee.vercel.app)** mediante Vercel, con `npm ci`, `npm run build` y salida `dist/`. `vercel.json` declara Astro como framework. La URL canónica, el sitemap y los metadatos sociales apuntan al dominio gratuito del proyecto. No necesita variables secretas en producción. El primer despliegue se realizó mediante el conector de Vercel; los pushes ejecutan pruebas pero aún no despliegan automáticamente. [Detalles del despliegue](docs/DEPLOYMENT.md).
 
 Para cambiar la URL pública, actualizar `astro.config.mjs`, `public/robots.txt`, `public/sitemap.xml`, la expectativa canónica en las pruebas y los enlaces de este README. El sitio se sirve desde la raíz del dominio.
 
 ## Documentación
 
 - [Brief y decisiones de diseño](PROJECT-BRIEF.md)
+- [Publicación y mantenimiento](docs/DEPLOYMENT.md)
 - [Revisión previa a publicación](docs/RELEASE-REVIEW.md)
 - [Procedencia de imágenes y tipografías](docs/ASSETS.md)
 - [Historial de cambios](CHANGELOG.md)
