@@ -263,25 +263,6 @@ a {
   height: 100px;
   transform: rotate(12deg);
 }
-.product-band {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1.6rem var(--gutter);
-  background: var(--ink);
-  color: var(--grey);
-  border-bottom: var(--line);
-  font-size: clamp(1.5rem, 4.4vw, 4.6rem);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.055em;
-}
-.band-symbol {
-  color: var(--yellow);
-  width: 0.8em;
-  flex-shrink: 0;
-}
 .infusion-time {
   margin-top: 1.5rem;
   font-size: 0.75rem;
@@ -737,12 +718,6 @@ a {
     width: 78px;
     height: 78px;
   }
-  .product-band {
-    flex-wrap: wrap;
-    gap: 0.65rem;
-    padding: 1.25rem;
-    font-size: clamp(1rem, 4.3vw, 1.8rem);
-  }
   .collection {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -902,9 +877,4 @@ a {
     transition: none !important;
     animation: none !important;
   }
-}
-
-.product-band { justify-content: center; gap: clamp(1rem, 5vw, 6rem); }
-@media (max-width: 700px) {
-  .product-band { gap: clamp(0.65rem, 3vw, 1.5rem); }
 }

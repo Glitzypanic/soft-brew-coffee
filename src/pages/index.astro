@@ -2,7 +2,6 @@
 import '@fontsource/jetbrains-mono/latin-400.css';
 import '@fontsource/jetbrains-mono/latin-500.css';
 import { Image } from 'astro:assets';
-import BrewIcon from '../components/BrewIcon.astro';
 import ColdBrewIcon from '../components/ColdBrewIcon.astro';
 import Arrow from '../components/Arrow.astro';
 import Bottle from '../components/Bottle.astro';
@@ -110,16 +109,7 @@ const socialImage = new URL('/social-cover.png', Astro.site);
           </div>
         </section>
 
-        <div
-          class="product-band"
-          aria-label="Cold brew de especialidad"
-        >
-          <span>COLD BREW</span><span class="band-symbol" aria-hidden="true"
-            ><BrewIcon /></span
-          ><span>ESPECIALIDAD</span>
-        </div>
-
-        <Collection />
+<Collection />
 
         <section class="pause" id="lado-frio" aria-labelledby="pause-title">
           <div class="pause-heading">
