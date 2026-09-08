@@ -32,3 +32,31 @@ test('expanded cards remain readable with enlarged text on a narrow screen', asy
   for (const summary of await page.locator('.variety summary').all()) await summary.click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBeTruthy();
 });
+
+test('name, bottle and details interpolate together and can reverse mid-flight', async ({ page }) => {
+  await page.setViewportSize({ width: 732, height: 900 });
+  await page.goto('/#origenes');
+  const card = page.locator('#colombia');
+  const summary = card.locator('summary');
+  const measure = () => card.evaluate(el => {
+    const title = el.querySelector('h3')!.getBoundingClientRect();
+    const bottle = el.querySelector('.bottle')!.getBoundingClientRect();
+    return { title: title.width, bottle: bottle.left, opacity: Number(getComputedStyle(el.querySelector('.variety-details')!).opacity) };
+  });
+  const start = await measure();
+  await summary.press('Enter');
+  await expect.poll(async () => (await measure()).opacity).toBeGreaterThan(.1);
+  const middle = await measure();
+  expect(middle.opacity).toBeLessThan(1);
+  expect(middle.title).toBeLessThan(start.title);
+  expect(middle.bottle).toBeLessThan(start.bottle);
+  await summary.press('Enter');
+  await summary.press('Enter');
+  await expect(card).toHaveAttribute('data-expanded', 'true');
+  await expect.poll(async () => (await measure()).opacity).toBe(1);
+  const end = await measure();
+  expect(end.title).toBeLessThan(middle.title);
+  await summary.press('Enter');
+  await expect(card).not.toHaveAttribute('open');
+  expect((await measure()).title).toBeCloseTo(start.title, 0);
+});

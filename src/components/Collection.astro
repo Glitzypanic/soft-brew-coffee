@@ -14,7 +14,7 @@ import { origins } from '../data/origins';
         <summary aria-label={`Ver características de ${origin.name}`}>
           <span class="variety-number mono">ORIGEN / {origin.number}</span>
           <span class="origin-image"><Bottle origin={origin.id} name={origin.name} /></span>
-          <span class="variety-title"><h3>{origin.name}</h3><span class="variety-toggle" aria-hidden="true">+</span></span>
+          <span class="variety-title"><h3>{origin.name}</h3><span class="variety-toggle" aria-hidden="true"><span class="toggle-glyph">+</span></span></span>
           <span class="variety-hint mono">DESCUBRIR</span>
         </summary>
         <div class="variety-details">
@@ -39,40 +39,51 @@ import { origins } from '../data/origins';
     const summary = card.querySelector('summary')!;
     const bottle = card.querySelector<HTMLElement>('.bottle')!;
     const content = card.querySelector<HTMLElement>('.variety-details')!;
+    const pieces = [bottle, ...card.querySelectorAll<HTMLElement>('h3, .variety-toggle, .variety-hint, .variety-number')];
     let expanded = card.open;
     let revision = 0;
     let animations: ReturnType<typeof animate>[] = [];
-    async function setExpanded(next: boolean) {
+    card.dataset.enhanced = '';
+    function setExpanded(next: boolean) {
       const current = ++revision;
       expanded = next;
+      // Capture the visible state before interrupting, including an unfinished transition.
+      const cardHeight = card.getBoundingClientRect().height;
+      const before = pieces.map(element => element.getBoundingClientRect());
+      const opacity = getComputedStyle(content).opacity;
+      const contentTransform = getComputedStyle(content).transform;
       animations.forEach(animation => animation.stop());
-      animations = [];
-      const duration = reducedMotion.matches ? 0 : .45;
-      if (next) {
-        const before = bottle.getBoundingClientRect();
-        card.open = true;
-        const after = bottle.getBoundingClientRect();
-        const shift = before.left + before.width / 2 - after.left - after.width / 2;
-        animations = [
-          animate(bottle, { transform: [`translateX(${shift}px)`, 'translateX(0px)'] }, { duration, ease: [.22, 1, .36, 1] }),
-          animate(content, { opacity: [0, 1], transform: ['translateX(18px)', 'translateX(0px)'] }, { duration, delay: duration ? .1 : 0 }),
-        ];
-      } else {
-        animations = [animate(content, { opacity: 0, transform: 'translateX(18px)' }, { duration: duration * .6 })];
-        await Promise.all(animations);
+      pieces.forEach(element => element.style.removeProperty('transform'));
+      card.open = true;
+      card.dataset.expanded = String(next);
+      content.inert = !next;
+      card.style.minHeight = `${Math.max(cardHeight, summary.offsetHeight, next ? content.scrollHeight : 0)}px`;
+      const duration = reducedMotion.matches ? 0 : 1.1;
+      const ease = [.4, 0, .2, 1] as const;
+      animations = pieces.map((element, index) => {
+        const from = before[index];
+        const to = element.getBoundingClientRect();
+        const x = from.left - to.left;
+        const y = from.top - to.top;
+        const scale = element.matches('.bottle, h3, .variety-toggle') && to.width ? from.width / to.width : 1;
+        return animate(element, {
+          transform: [`translate(${x}px, ${y}px) scale(${scale})`, 'translate(0px, 0px) scale(1)'],
+        }, { duration, ease });
+      });
+      animations.push(animate(content, {
+        opacity: [opacity, next ? 1 : 0],
+        transform: [contentTransform === 'none' ? 'translateX(32px)' : contentTransform, next ? 'translateX(0px)' : 'translateX(32px)'],
+      }, { duration, ease }));
+      // The icon rotates inside its moving wrapper, on the same clock as the composition.
+      animations.push(animate(card.querySelector<HTMLElement>('.toggle-glyph')!, {
+        transform: `rotate(${next ? 45 : 0}deg)`,
+      }, { duration, ease }));
+      animations[0].then(() => {
         if (revision !== current) return;
-        const before = bottle.getBoundingClientRect();
-        card.open = false;
-        const after = bottle.getBoundingClientRect();
-        const shift = before.left + before.width / 2 - after.left - after.width / 2;
-        animations = [animate(bottle, { transform: [`translateX(${shift}px)`, 'translateX(0px)'] }, { duration, ease: [.22, 1, .36, 1] })];
-      }
-      await Promise.all(animations);
-      if (revision === current) {
-        bottle.style.removeProperty('transform');
-        content.style.removeProperty('transform');
-        content.style.removeProperty('opacity');
-      }
+        card.open = next;
+        if (!next) card.style.removeProperty('min-height');
+        pieces.forEach(element => element.style.removeProperty('transform'));
+      });
     }
     summary.addEventListener('click', event => {
       event.preventDefault();
@@ -91,13 +102,13 @@ import { origins } from '../data/origins';
   .picker-heading > p:last-child { font-size: 1.125rem; line-height: 1.5; }
   .picker-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); align-items: start; }
   .variety { overflow: clip; position: relative; background: var(--origin-color); color: var(--origin-ink); min-width: 0; border-right: var(--line); }
-  .variety[open] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+  .variety:not([data-enhanced])[open] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
   .variety::details-content { min-width: 0; }
-  .variety[open] summary { min-width: 0; padding-right: .5rem; }
-  .variety[open] :global(.origin-image .bottle) { max-width: 100%; height: auto; aspect-ratio: 2 / 3; }
-  .variety[open] :global(.bottle img) { object-fit: contain; }
+  .variety[data-expanded="true"] summary { min-width: 0; padding-right: .5rem; }
+  .variety[data-expanded="true"] :global(.origin-image .bottle) { max-width: 100%; height: auto; aspect-ratio: 2 / 3; }
+  .variety[data-expanded="true"] :global(.bottle img) { object-fit: contain; }
   .variety[open] .variety-details { margin: 0; padding: 1.5rem 1rem; border-top: 0; }
-  .variety[open] h3 { font-size: clamp(1.1rem, 1.8vw, 2rem); }
+  .variety[data-expanded="true"] h3 { font-size: clamp(.85rem, 1.5vw, 1.6rem); }
   .variety:last-child { border-right: 0; }
   summary { list-style: none; cursor: pointer; padding: 1.5rem; }
   summary::-webkit-details-marker { display: none; }
@@ -107,8 +118,16 @@ import { origins } from '../data/origins';
   .variety :global(.origin-image .bottle) { width: 220px; height: 330px; transform: rotate(0deg); }
   .variety-title { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
   h3 { font-size: clamp(1.5rem,2.5vw,3rem); letter-spacing: -.05em; font-weight: 600; overflow-wrap: anywhere; }
-  .variety-toggle { font-size: 2rem; font-weight: 400; flex-shrink: 0; transition: transform .2s; }
-  details[open] .variety-toggle { transform: rotate(45deg); }
+  .variety-toggle { font-size: 2rem; font-weight: 400; flex-shrink: 0; }
+  .toggle-glyph { display: block; }
+  .variety[data-enhanced] :global(.origin-image) { overflow: visible; }
+  .variety[data-enhanced] summary { width: 100%; }
+  .variety[data-expanded="true"] summary { width: 50%; }
+  .variety[data-enhanced] .variety-details { position: absolute; left: 50%; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; margin: 0; padding: 1.5rem 1rem; border: 0; opacity: 0; transform: translateX(32px); }
+  .variety[data-enhanced] :is(h3, .variety-toggle, .variety-number, .variety-hint), .variety[data-enhanced] :global(.bottle) { transform-origin: top left; }
+  .variety[data-expanded="true"] .variety-toggle { font-size: 1.5rem; }
+  .variety[data-enhanced] h3 { white-space: nowrap; }
+
   .variety-hint { display: block; font-size: .65rem; margin-top: .7rem; }
   .variety-details { min-width: 0; overflow-wrap: anywhere; margin: 0 1.5rem; padding: 1.5rem 0; border-top: 1px solid currentColor; }
   ul { list-style: none; padding: 0; margin: .75rem 0 1.5rem; font-size: 1.1rem; line-height: 1.5; }
@@ -126,7 +145,7 @@ import { origins } from '../data/origins';
     h3 { font-size: clamp(1.2rem,4vw,2rem); }
   }
   @media(max-width: 560px) {
-    .variety[open] { grid-column: 1 / -1; }
+    .picker-grid { grid-template-columns: 1fr; }
   }
   @media(max-width: 380px) {
     .variety :global(.origin-image) { height: 190px; }
