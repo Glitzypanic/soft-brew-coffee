@@ -31,11 +31,56 @@ import { origins } from '../data/origins';
   </div>
 </section>
 <script>
-  // Preserve existing links to individual origins, including shared URLs.
-  function revealOrigin() {
-    const origin = document.getElementById(location.hash.slice(1));
-    if (origin instanceof HTMLDetailsElement && origin.classList.contains('variety')) origin.open = true;
-  }
+  import { animate } from 'motion/mini';
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const cards = document.querySelectorAll<HTMLDetailsElement>('.variety');
+  const openers = new Map<string, () => void>();
+  cards.forEach(card => {
+    const summary = card.querySelector('summary')!;
+    const bottle = card.querySelector<HTMLElement>('.bottle')!;
+    const content = card.querySelector<HTMLElement>('.variety-details')!;
+    let expanded = card.open;
+    let revision = 0;
+    let animations: ReturnType<typeof animate>[] = [];
+    async function setExpanded(next: boolean) {
+      const current = ++revision;
+      expanded = next;
+      animations.forEach(animation => animation.stop());
+      animations = [];
+      const duration = reducedMotion.matches ? 0 : .45;
+      if (next) {
+        const before = bottle.getBoundingClientRect();
+        card.open = true;
+        const after = bottle.getBoundingClientRect();
+        const shift = before.left + before.width / 2 - after.left - after.width / 2;
+        animations = [
+          animate(bottle, { transform: [`translateX(${shift}px)`, 'translateX(0px)'] }, { duration, ease: [.22, 1, .36, 1] }),
+          animate(content, { opacity: [0, 1], transform: ['translateX(18px)', 'translateX(0px)'] }, { duration, delay: duration ? .1 : 0 }),
+        ];
+      } else {
+        animations = [animate(content, { opacity: 0, transform: 'translateX(18px)' }, { duration: duration * .6 })];
+        await Promise.all(animations);
+        if (revision !== current) return;
+        const before = bottle.getBoundingClientRect();
+        card.open = false;
+        const after = bottle.getBoundingClientRect();
+        const shift = before.left + before.width / 2 - after.left - after.width / 2;
+        animations = [animate(bottle, { transform: [`translateX(${shift}px)`, 'translateX(0px)'] }, { duration, ease: [.22, 1, .36, 1] })];
+      }
+      await Promise.all(animations);
+      if (revision === current) {
+        bottle.style.removeProperty('transform');
+        content.style.removeProperty('transform');
+        content.style.removeProperty('opacity');
+      }
+    }
+    summary.addEventListener('click', event => {
+      event.preventDefault();
+      void setExpanded(!expanded);
+    });
+    openers.set(card.id, () => { if (!expanded) void setExpanded(true); });
+  });
+  function revealOrigin() { openers.get(location.hash.slice(1))?.(); }
   revealOrigin();
   window.addEventListener('hashchange', revealOrigin);
 </script>
@@ -45,7 +90,14 @@ import { origins } from '../data/origins';
   .picker-heading h2 { font-size: clamp(2.5rem, 5vw, 5.5rem); font-weight: 600; letter-spacing: -.055em; margin: 1rem 0; }
   .picker-heading > p:last-child { font-size: 1.125rem; line-height: 1.5; }
   .picker-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); align-items: start; }
-  .variety { background: var(--origin-color); color: var(--origin-ink); min-width: 0; border-right: var(--line); }
+  .variety { overflow: clip; position: relative; background: var(--origin-color); color: var(--origin-ink); min-width: 0; border-right: var(--line); }
+  .variety[open] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+  .variety::details-content { min-width: 0; }
+  .variety[open] summary { min-width: 0; padding-right: .5rem; }
+  .variety[open] :global(.origin-image .bottle) { max-width: 100%; height: auto; aspect-ratio: 2 / 3; }
+  .variety[open] :global(.bottle img) { object-fit: contain; }
+  .variety[open] .variety-details { margin: 0; padding: 1.5rem 1rem; border-top: 0; }
+  .variety[open] h3 { font-size: clamp(1.1rem, 1.8vw, 2rem); }
   .variety:last-child { border-right: 0; }
   summary { list-style: none; cursor: pointer; padding: 1.5rem; }
   summary::-webkit-details-marker { display: none; }
@@ -58,7 +110,7 @@ import { origins } from '../data/origins';
   .variety-toggle { font-size: 2rem; font-weight: 400; flex-shrink: 0; transition: transform .2s; }
   details[open] .variety-toggle { transform: rotate(45deg); }
   .variety-hint { display: block; font-size: .65rem; margin-top: .7rem; }
-  .variety-details { overflow-wrap: anywhere; margin: 0 1.5rem; padding: 1.5rem 0; border-top: 1px solid currentColor; }
+  .variety-details { min-width: 0; overflow-wrap: anywhere; margin: 0 1.5rem; padding: 1.5rem 0; border-top: 1px solid currentColor; }
   ul { list-style: none; padding: 0; margin: .75rem 0 1.5rem; font-size: 1.1rem; line-height: 1.5; }
   dl { margin: 0 0 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
   dt { font: .7rem var(--mono); }
@@ -70,8 +122,11 @@ import { origins } from '../data/origins';
     summary { padding: 1rem; }
     .variety :global(.origin-image) { height: 230px; }
     .variety :global(.origin-image .bottle) { height: 230px; width: 153px; }
-    .variety-details { overflow-wrap: anywhere; margin: 0 1rem; }
+    .variety-details { min-width: 0; overflow-wrap: anywhere; margin: 0 1rem; }
     h3 { font-size: clamp(1.2rem,4vw,2rem); }
+  }
+  @media(max-width: 560px) {
+    .variety[open] { grid-column: 1 / -1; }
   }
   @media(max-width: 380px) {
     .variety :global(.origin-image) { height: 190px; }

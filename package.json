@@ -1,7 +1,7 @@
 {
   "name": "soft-brew-coffee",
   "version": "1.0.0",
-  "description": "Soft Brew Coffee \u2014 landing editorial de cold brew de especialidad",
+  "description": "Soft Brew Coffee — landing editorial de cold brew de especialidad",
   "scripts": {
     "dev": "astro dev --host 127.0.0.1 --port 4322",
     "check": "astro check",
@@ -15,7 +15,8 @@
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
     "@fontsource/jetbrains-mono": "^5.3.0",
-    "astro": "^7.3.1"
+    "astro": "^7.3.1",
+    "motion": "^13.2.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
