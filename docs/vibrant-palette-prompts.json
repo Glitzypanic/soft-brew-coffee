@@ -1,0 +1,12 @@
+[
+  {
+    "asset": "src/assets/relit-honduras-vibrant-pink.png",
+    "mode": "built-in image_gen",
+    "prompt": "Precise product photograph edit. Replace existing pastel label and background color with #F2529D vibrant saturated pink, and recolor all environmental reflections and transmitted light in glass neck, edges, shoulders and base to match. Preserve dark brown coffee and SILVER metal cap. Keep all printed label text, logo, QR and rules black. Preserve exact original text and graphics, bottle silhouette, dimensions, position, scale, camera, sharpness and 1024x1536 framing. No redesign, no new text, no cropping, no moved bottle. Background flat #F2529D vibrant saturated pink. Strong confident premium palette, no pastel. Realistic restrained reflections without colored stains on paper label."
+  },
+  {
+    "asset": "src/assets/relit-costa-rica-emerald.png",
+    "mode": "built-in image_gen",
+    "prompt": "Precise product photograph edit. Replace existing pastel label and background color with #008F6B saturated emerald green, and recolor all environmental reflections and transmitted light in glass neck, edges, shoulders and base to match. Preserve dark brown coffee and SILVER metal cap. Change printed label ink including logo, QR, text and rules to white for clear contrast. Preserve exact original text and graphics, bottle silhouette, dimensions, position, scale, camera, sharpness and 1024x1536 framing. No redesign, no new text, no cropping, no moved bottle. Background flat #008F6B saturated emerald green. Strong confident premium palette, no pastel. Realistic restrained reflections without colored stains on paper label."
+  }
+]

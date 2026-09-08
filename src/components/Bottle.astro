@@ -18,8 +18,8 @@ const {
 const lighting: Record<string, string> = {
   colombia: context === 'hero' ? 'colombia-yellow' : 'colombia-grey',
   peru: 'peru-yellow',
-  honduras: 'honduras-orange',
-  'costa-rica': 'costa-rica-blue',
+  honduras: 'honduras-vibrant-pink',
+  'costa-rica': 'costa-rica-royal-blue',
 };
 const assets = import.meta.glob<{ default: ImageMetadata }>(
   '../assets/relit-*.png',
@@ -44,4 +44,5 @@ if (!bottle) throw new Error(`Missing bottle asset for ${origin}`);
     loading={eager ? 'eager' : 'lazy'}
     decoding="async"
   />
+  <slot />
 </span>

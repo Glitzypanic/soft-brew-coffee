@@ -7,6 +7,7 @@ export interface Origin {
   color: string;
   ink: string;
   cap: 'silver' | 'gold';
+  comingSoon?: boolean;
   notesStatus: 'label' | 'confirmed';
 }
 
@@ -35,23 +36,25 @@ export const origins: Origin[] = [
   },
   {
     id: 'honduras',
+    comingSoon: true,
     name: 'Honduras',
     number: '03',
     infusionHours: 26,
     notes: ['Cacao', 'Panela', 'Nuez'],
-    color: '#FF5A1F',
+    color: '#F2529D',
     ink: '#111111',
     cap: 'silver',
     notesStatus: 'confirmed',
   },
   {
     id: 'costa-rica',
+    comingSoon: true,
     name: 'Costa Rica',
     number: '04',
     infusionHours: 24,
     notes: ['Naranja dulce', 'Miel', 'Caramelo'],
-    color: '#2455FF',
-    ink: '#FFFFFF',
+    color: '#496DFF',
+    ink: '#000000',
     cap: 'silver',
     notesStatus: 'confirmed',
   },

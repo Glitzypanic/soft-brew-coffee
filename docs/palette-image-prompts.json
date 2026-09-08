@@ -1,0 +1,12 @@
+[
+  {
+    "asset": "src/assets/relit-honduras-pink.png",
+    "mode": "built-in image_gen",
+    "prompt": "Use case: precise-object-edit. Edit this exact product photograph for a premium specialty cold brew website. Replace ONLY all orange colors with #EAA4BD dusty soft pink: backdrop, printed paper label color, transmitted light through neck and glass base, subtle reflected environmental light along glass sides and shoulders. Preserve exact bottle outline, body geometry, cap geometry, position, scale and 1024x1536 portrait framing with absolutely no movement or crop. Preserve all black label text, lettering, QR graphics and logo pixel-faithfully, the dark brown coffee, realistic glass texture. Keep the metal screw cap SILVER, neutral with subtle environment reflections. Background flat #EAA4BD dusty soft pink. Label solid matching color with authentic fine paper texture. Glass reflections must convincingly belong in new scene without coating the dark coffee pink/blue or putting strong color stains across label. No new text, no new graphic elements. Bottle must occupy exactly same pixels and silhouette as input for existing clipping mask."
+  },
+  {
+    "asset": "src/assets/relit-costa-rica-periwinkle.png",
+    "mode": "built-in image_gen",
+    "prompt": "Use case: precise-object-edit. Edit this exact product photograph for a premium specialty cold brew website. Replace ONLY all saturated royal blue colors with #9DAFE5 soft periwinkle lavender blue: backdrop, printed paper label color, transmitted light through neck and glass base, subtle reflected environmental light along glass sides and shoulders. Preserve exact bottle outline, body geometry, cap geometry, position, scale and 1024x1536 portrait framing with absolutely no movement or crop. Preserve all black label text, lettering, QR graphics and logo pixel-faithfully, the dark brown coffee, realistic glass texture. Keep the metal screw cap SILVER, neutral with subtle environment reflections. Background flat #9DAFE5 soft periwinkle lavender blue. Label solid matching color with authentic fine paper texture. Glass reflections must convincingly belong in new scene without coating the dark coffee pink/blue or putting strong color stains across label. No new text, no new graphic elements. Bottle must occupy exactly same pixels and silhouette as input for existing clipping mask."
+  }
+]

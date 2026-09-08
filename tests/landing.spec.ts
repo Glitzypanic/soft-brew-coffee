@@ -9,14 +9,15 @@ test('the collection is readable, its anchors work, and every image loads', asyn
   await page.goto('/');
   await expect(page).toHaveTitle('Soft Brew Coffee — El lado frío del café');
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
-  for (const origin of ['Colombia', 'Perú', 'Honduras', 'Costa Rica']) {
+  for (const origin of ['Colombia', 'Perú']) {
     await page
-      .locator('summary', { hasText: origin })
+      .locator('.variety-summary', { hasText: origin })
       .click();
     await expect(
       page.getByRole('heading', { level: 3, name: origin, exact: true }),
     ).toBeInViewport();
   }
+  await expect(page.getByRole('heading', { level: 3, name: 'Próximamente', exact: true })).toHaveCount(2);
   // Scroll each lazy image into view before testing its decoded state.
   for (const img of await page.locator('img').all()) {
     await img.scrollIntoViewIfNeeded();
@@ -29,7 +30,7 @@ test('the collection is readable, its anchors work, and every image loads', asyn
       )
       .toBeTruthy();
   }
-  await expect(page.locator('.origin-image img')).toHaveCount(4);
+  await expect(page.locator('.origin-image > .bottle > img')).toHaveCount(4);
   await expect(page.locator('.hero-bottles img')).toHaveCount(2);
   expect(errors).toEqual([]);
   await page.getByRole('link', { name: 'VOLVER ARRIBA' }).click();
@@ -95,7 +96,7 @@ test('reduced motion and enlarged text preserve access to content', async ({
     ),
   ).toBe('auto');
   await page.addStyleTag({ content: 'html { font-size: 200%; }' });
-  for (const title of ['Colombia', 'Perú', 'Honduras', 'Costa Rica']) {
+  for (const title of ['Colombia', 'Perú']) {
     await expect(
       page.getByRole('heading', { level: 3, name: title, exact: true }),
     ).toBeVisible();

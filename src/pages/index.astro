@@ -2,7 +2,6 @@
 import '@fontsource/jetbrains-mono/latin-400.css';
 import '@fontsource/jetbrains-mono/latin-500.css';
 import { Image } from 'astro:assets';
-import ColdBrewIcon from '../components/ColdBrewIcon.astro';
 import Arrow from '../components/Arrow.astro';
 import Bottle from '../components/Bottle.astro';
 import BottleMasks from '../components/BottleMasks.astro';
@@ -60,17 +59,13 @@ const socialImage = new URL('/social-cover.png', Astro.site);
       <main id="contenido">
         <section class="hero" aria-labelledby="hero-title">
           <div class="hero-brand">
+            <span class="hero-color-mark hero-color-mark--pink" aria-hidden="true"></span>
+            <span class="hero-color-mark hero-color-mark--blue" aria-hidden="true"></span>
             <p class="mono eyebrow">BUEN CAFÉ. EN FRÍO.</p>
             <h1 id="hero-title">
-              <span class="sr-only"
-                >Soft Brew Coffee. Cold brew de especialidad.</span
-              ><img
-                src="/brand/soft-brew-coffee.svg"
-                alt=""
-                width="601"
-                height="429"
-                fetchpriority="high"
-              />
+              <span class="hero-title-line">Soft Brew</span>
+              <span class="hero-title-line hero-title-line--accent">Coffee</span>
+              <span class="hero-title-sub mono">COLD BREW / ESPECIALIDAD</span>
             </h1>
             <div class="hero-intro">
               <p>Café de especialidad.<br />Una nueva perspectiva.</p><a
@@ -80,6 +75,7 @@ const socialImage = new URL('/social-cover.png', Astro.site);
                 ><Arrow direction="down" /></a
               >
             </div>
+            <p class="hero-origin-note mono">04 ORÍGENES <span aria-hidden="true">/</span> 01 LADO FRÍO</p>
           </div>
           <div class="hero-stage">
             <p class="stage-label mono">CUATRO ORÍGENES.<br />UN LADO FRÍO.</p>
@@ -172,9 +168,7 @@ const socialImage = new URL('/social-cover.png', Astro.site);
           </div>
         </div>
         <div class="footer-brand" aria-hidden="true">
-          <span>SOFT BREW</span><span
-            >COFFEE<span class="footer-icon"><ColdBrewIcon /></span></span
-          >
+          <span>SOFT BREW</span><span>COFFEE</span>
         </div>
         <div class="footer-bottom mono">
           <span>CAFÉ DE ESPECIALIDAD / 200 ML</span><a href="#inicio"

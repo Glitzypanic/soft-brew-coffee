@@ -1,5 +1,8 @@
 ---
 import Bottle from './Bottle.astro';
+import { Image } from 'astro:assets';
+import yellowSticker from '../assets/drop-soon-yellow.png';
+import greenSticker from '../assets/drop-soon-green.png';
 import { origins } from '../data/origins';
 ---
 <section class="collection-picker" id="origenes" aria-labelledby="origins-title">
@@ -9,37 +12,43 @@ import { origins } from '../data/origins';
     <p>Un mundo de notas. Elige un botellín y descubre su carácter.</p>
   </div>
   <div class="picker-grid">
-    {origins.map(origin => (
-      <details class="variety" id={origin.id} style={`--origin-color:${origin.color};--origin-ink:${origin.ink}`}>
-        <summary aria-label={`Ver características de ${origin.name}`}>
-          <span class="variety-number mono">ORIGEN / {origin.number}</span>
-          <span class="origin-image"><Bottle origin={origin.id} name={origin.name} /></span>
-          <span class="variety-title"><h3>{origin.name}</h3><span class="variety-toggle" aria-hidden="true"><span class="toggle-glyph">+</span></span></span>
-          <span class="variety-hint mono">DESCUBRIR</span>
-        </summary>
-        <div class="variety-details">
+    {origins.map(origin => {
+      const Card = origin.comingSoon ? 'article' : 'details';
+      const Heading = origin.comingSoon ? 'div' : 'summary';
+      return (
+      <Card class="variety" id={origin.id} style={`--origin-color:${origin.color};--origin-ink:${origin.ink}`}>
+        <Heading class="variety-summary" aria-label={origin.comingSoon ? undefined : `Ver características de ${origin.name}`} aria-describedby={origin.comingSoon ? `${origin.id}-soon` : undefined}>
+          <span class="variety-number mono">{origin.comingSoon ? `PRÓXIMO DROP / ${origin.number}` : `ORIGEN / ${origin.number}`}</span>
+          <span class="origin-image">
+            <Bottle origin={origin.id} name={origin.name}>
+            {origin.comingSoon && <span class="drop-sticker" role="img" id={`${origin.id}-soon`} aria-label="Próximamente disponible"><Image src={origin.id === 'honduras' ? greenSticker : yellowSticker} width={240} format="webp" quality={95} alt="" loading="lazy" /></span>}
+            </Bottle>
+          </span>
+          <span class="variety-title"><h3>{origin.comingSoon ? 'Próximamente' : origin.name}</h3>{!origin.comingSoon && <span class="variety-toggle" aria-hidden="true"><span class="toggle-glyph"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="2.5" /></svg></span></span>}</span>
+          {!origin.comingSoon && <span class="variety-hint mono">DESCUBRIR</span>}
+        </Heading>
+        {!origin.comingSoon && <div class="variety-details">
           <p class="mono eyebrow">NOTAS</p>
           <ul>{origin.notes.map(note => <li>{note}</li>)}</ul>
           <dl>
             <div><dt>INFUSIÓN</dt><dd>{origin.infusionHours} horas</dd></div>
             <div><dt>FORMATO</dt><dd>200 ml</dd></div>
           </dl>
-          <p class="mono eyebrow">CAFÉ DE ESPECIALIDAD / COLD BREW</p>
-        </div>
-      </details>
-    ))}
+        </div>}
+      </Card>
+    ); })}
   </div>
 </section>
 <script>
   import { animate } from 'motion/mini';
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const cards = document.querySelectorAll<HTMLDetailsElement>('.variety');
+  const cards = document.querySelectorAll<HTMLDetailsElement>('details.variety');
   const openers = new Map<string, () => void>();
   cards.forEach(card => {
     const summary = card.querySelector('summary')!;
     const bottle = card.querySelector<HTMLElement>('.bottle')!;
     const content = card.querySelector<HTMLElement>('.variety-details')!;
-    const pieces = [bottle, ...card.querySelectorAll<HTMLElement>('h3, .variety-toggle, .variety-hint, .variety-number')];
+    const pieces = [bottle, ...card.querySelectorAll<HTMLElement>('h3, .variety-hint, .variety-number')];
     let expanded = card.open;
     let revision = 0;
     let animations: ReturnType<typeof animate>[] = [];
@@ -65,7 +74,7 @@ import { origins } from '../data/origins';
         const to = element.getBoundingClientRect();
         const x = from.left - to.left;
         const y = from.top - to.top;
-        const scale = element.matches('.bottle, h3, .variety-toggle') && to.width ? from.width / to.width : 1;
+        const scale = element.matches('.bottle, h3') && to.width ? from.width / to.width : 1;
         return animate(element, {
           transform: [`translate(${x}px, ${y}px) scale(${scale})`, 'translate(0px, 0px) scale(1)'],
         }, { duration, ease });
@@ -97,48 +106,55 @@ import { origins } from '../data/origins';
 </script>
 <style>
   .collection-picker { overflow-wrap: anywhere; background: var(--ink); color: var(--grey); border-bottom: var(--line); }
-  .picker-heading { padding: 3rem var(--gutter); }
-  .picker-heading h2 { font-size: clamp(2.5rem, 5vw, 5.5rem); font-weight: 600; letter-spacing: -.055em; margin: 1rem 0; }
+  .picker-heading { padding: 2rem var(--gutter) 1.75rem; }
+  .picker-heading h2 { font-size: clamp(2.5rem, 5vw, 5.5rem); font-weight: 600; letter-spacing: -.055em; margin: .65rem 0; }
   .picker-heading > p:last-child { font-size: 1.125rem; line-height: 1.5; }
-  .picker-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); align-items: start; }
+  .picker-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); align-items: stretch; }
   .variety { overflow: clip; position: relative; background: var(--origin-color); color: var(--origin-ink); min-width: 0; border-right: var(--line); }
   .variety:not([data-enhanced])[open] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
   .variety::details-content { min-width: 0; }
-  .variety[data-expanded="true"] summary { min-width: 0; padding-right: .5rem; }
+  .variety[data-expanded="true"] .variety-summary { min-width: 0; padding-right: .5rem; }
   .variety[data-expanded="true"] :global(.origin-image .bottle) { max-width: 100%; height: auto; aspect-ratio: 2 / 3; }
   .variety[data-expanded="true"] :global(.bottle img) { object-fit: contain; }
   .variety[open] .variety-details { margin: 0; padding: 1.5rem 1rem; border-top: 0; }
-  .variety[data-expanded="true"] h3 { font-size: clamp(.85rem, 1.5vw, 1.6rem); }
+  .variety[data-expanded="true"] h3 { font-size: clamp(1.1rem, 1.8vw, 1.85rem); }
   .variety:last-child { border-right: 0; }
-  summary { list-style: none; cursor: pointer; padding: 1.5rem; }
-  summary::-webkit-details-marker { display: none; }
-  summary:focus-visible { outline: 3px solid currentColor; outline-offset: -7px; }
+  .variety-summary { list-style: none; cursor: pointer; padding: 1.5rem; }
+  article .variety-summary { cursor: default; }
+  .variety-summary::-webkit-details-marker { display: none; }
+  .variety-summary:focus-visible { outline: 3px solid currentColor; outline-offset: -7px; }
   .variety-number { display: block; font-size: .75rem; }
   .variety :global(.origin-image) { padding: 0; height: 330px; }
-  .variety :global(.origin-image .bottle) { width: 220px; height: 330px; transform: rotate(0deg); }
+  .variety :global(.origin-image .bottle) { position: relative; width: 220px; height: 330px; transform: rotate(0deg); }
+  .origin-image { position: relative; }
+  article.variety :global(.origin-image .bottle) { max-width: 100%; height: auto; }
+  .drop-sticker { position: absolute; top: 8%; left: 56%; z-index: 1; display: grid; place-items: center; width: 44%; aspect-ratio: 1; color: #111; pointer-events: none; isolation: isolate; filter: drop-shadow(1px 2px 1px #17152b30); }
+  .drop-sticker :global(img) { display: block; width: 100%; height: auto; object-fit: contain; }
   .variety-title { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
   h3 { font-size: clamp(1.5rem,2.5vw,3rem); letter-spacing: -.05em; font-weight: 600; overflow-wrap: anywhere; }
-  .variety-toggle { font-size: 2rem; font-weight: 400; flex-shrink: 0; }
-  .toggle-glyph { display: block; }
+  .variety-toggle { position: absolute; top: 1.5rem; right: 1.5rem; z-index: 2; font-size: 1.5rem; font-weight: 400; }
+  .toggle-glyph { display: block; width: 1em; height: 1em; transform-origin: 50% 50%; }
+  .toggle-glyph svg { display: block; width: 100%; height: 100%; }
   .variety[data-enhanced] :global(.origin-image) { overflow: visible; }
-  .variety[data-enhanced] summary { width: 100%; }
-  .variety[data-expanded="true"] summary { width: 50%; }
-  .variety[data-enhanced] .variety-details { position: absolute; left: 50%; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; margin: 0; padding: 1.5rem 1rem; border: 0; opacity: 0; transform: translateX(32px); }
-  .variety[data-enhanced] :is(h3, .variety-toggle, .variety-number, .variety-hint), .variety[data-enhanced] :global(.bottle) { transform-origin: top left; }
-  .variety[data-expanded="true"] .variety-toggle { font-size: 1.5rem; }
+  .variety[data-enhanced] .variety-summary { width: 100%; }
+  .variety[data-expanded="true"] .variety-summary { width: 55%; }
+  .variety[data-enhanced] .variety-details { position: absolute; left: 55%; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; margin: 0; padding: 4rem 1rem 1.5rem; border: 0; opacity: 0; transform: translateX(32px); }
+  .variety[data-enhanced] :is(h3, .variety-number, .variety-hint), .variety[data-enhanced] :global(.bottle) { transform-origin: top left; }
   .variety[data-enhanced] h3 { white-space: nowrap; }
 
   .variety-hint { display: block; font-size: .65rem; margin-top: .7rem; }
   .variety-details { min-width: 0; overflow-wrap: anywhere; margin: 0 1.5rem; padding: 1.5rem 0; border-top: 1px solid currentColor; }
-  ul { list-style: none; padding: 0; margin: .75rem 0 1.5rem; font-size: 1.1rem; line-height: 1.5; }
+  ul, dd { font-family: var(--mono); }
+  ul { list-style: none; padding: 0; margin: .75rem 0 1.5rem; font-size: 1rem; line-height: 1.5; }
   dl { margin: 0 0 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
   dt { font: .7rem var(--mono); }
-  dd { margin: .5rem 0 0; font-size: 1.1rem; }
+  dd { margin: .5rem 0 0; font-size: 1rem; }
   @media(max-width: 900px) {
     .picker-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
     .variety { border-bottom: var(--line); }
     .variety:nth-child(2n) { border-right: 0; }
-    summary { padding: 1rem; }
+    .variety-summary { padding: 1rem; }
+    .variety-toggle { top: 1rem; right: 1rem; }
     .variety :global(.origin-image) { height: 230px; }
     .variety :global(.origin-image .bottle) { height: 230px; width: 153px; }
     .variety-details { min-width: 0; overflow-wrap: anywhere; margin: 0 1rem; }

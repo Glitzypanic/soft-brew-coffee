@@ -275,3 +275,15 @@ Implementar el mapa y esquemas de sección 2 con recursos de sección 3, reglas 
 
 ### 11.3 Autonomía permitida y bloqueos pendientes
 Aplicar D04 a los recursos derivados y 7.3 a detalles de interfaz. Fuentes, URL y veracidad de notas necesitan su evidencia antes de cerrar sus decisiones respectivas; no bloquean la comprensión del conjunto. Leer este brief junto con decisiones posteriores y cualquier especificación o prototipo que se apruebe. El siguiente paso documental es `/grill-with-docs`; no se ejecuta automáticamente.
+
+## Actualización de paleta — 2026-09-08
+
+Solicitud del propietario: Honduras pasa de naranja a rosado y Costa Rica a un azul más armónico. Implementación local: Honduras #EAA4BD y Costa Rica #9DAFE5, ambos con texto #111111 y tapas plateadas. Etiquetas y reflejos del vidrio adaptados con edición de imágenes. Esta actualización sustituye los colores anteriores de estos dos orígenes.
+
+### Paleta intensa confirmada
+
+El propietario descarta los tonos suaves y confirma Honduras rosa vibrante #F2529D y Costa Rica verde esmeralda #008F6B. Etiquetas y reflejos actualizados, ambas tapas plateadas. Sustituye la propuesta pastel anterior.
+
+Corrección del propietario: todas las letras deben ser negras. Costa Rica se ajusta a #19B889 con tinta #111111, tanto en la interfaz como en la etiqueta; reflejos actualizados.
+
+Actualización: el propietario vuelve a solicitar azul intenso en lugar del verde. Se aplica #496DFF con tinta negra, etiqueta y reflejos azules, conservando tapa plateada y estado Próximamente.
