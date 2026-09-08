@@ -11,8 +11,7 @@ test('the collection is readable, its anchors work, and every image loads', asyn
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
   for (const origin of ['Colombia', 'Perú', 'Honduras', 'Costa Rica']) {
     await page
-      .getByRole('navigation', { name: 'Índice de orígenes' })
-      .getByRole('link', { name: new RegExp(origin) })
+      .locator('summary', { hasText: origin })
       .click();
     await expect(
       page.getByRole('heading', { level: 3, name: origin, exact: true }),

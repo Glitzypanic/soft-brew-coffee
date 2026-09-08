@@ -1,0 +1,81 @@
+---
+import Bottle from './Bottle.astro';
+import { origins } from '../data/origins';
+---
+<section class="collection-picker" id="origenes" aria-labelledby="origins-title">
+  <div class="picker-heading">
+    <p class="mono eyebrow">LA COLECCIÓN / 01—04</p>
+    <h2 id="origins-title">Cuatro orígenes.</h2>
+    <p>Un mundo de notas. Elige un botellín y descubre su carácter.</p>
+  </div>
+  <div class="picker-grid">
+    {origins.map(origin => (
+      <details class="variety" id={origin.id} style={`--origin-color:${origin.color};--origin-ink:${origin.ink}`}>
+        <summary aria-label={`Ver características de ${origin.name}`}>
+          <span class="variety-number mono">ORIGEN / {origin.number}</span>
+          <span class="origin-image"><Bottle origin={origin.id} name={origin.name} /></span>
+          <span class="variety-title"><h3>{origin.name}</h3><span class="variety-toggle" aria-hidden="true">+</span></span>
+          <span class="variety-hint mono">DESCUBRIR</span>
+        </summary>
+        <div class="variety-details">
+          <p class="mono eyebrow">NOTAS</p>
+          <ul>{origin.notes.map(note => <li>{note}</li>)}</ul>
+          <dl>
+            <div><dt>INFUSIÓN</dt><dd>{origin.infusionHours} horas</dd></div>
+            <div><dt>FORMATO</dt><dd>200 ml</dd></div>
+          </dl>
+          <p class="mono eyebrow">CAFÉ DE ESPECIALIDAD / COLD BREW</p>
+        </div>
+      </details>
+    ))}
+  </div>
+</section>
+<script>
+  // Preserve existing links to individual origins, including shared URLs.
+  function revealOrigin() {
+    const origin = document.getElementById(location.hash.slice(1));
+    if (origin instanceof HTMLDetailsElement && origin.classList.contains('variety')) origin.open = true;
+  }
+  revealOrigin();
+  window.addEventListener('hashchange', revealOrigin);
+</script>
+<style>
+  .collection-picker { overflow-wrap: anywhere; background: var(--ink); color: var(--grey); border-bottom: var(--line); }
+  .picker-heading { padding: 3rem var(--gutter); }
+  .picker-heading h2 { font-size: clamp(2.5rem, 5vw, 5.5rem); font-weight: 600; letter-spacing: -.055em; margin: 1rem 0; }
+  .picker-heading > p:last-child { font-size: 1.125rem; line-height: 1.5; }
+  .picker-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); align-items: start; }
+  .variety { background: var(--origin-color); color: var(--origin-ink); min-width: 0; border-right: var(--line); }
+  .variety:last-child { border-right: 0; }
+  summary { list-style: none; cursor: pointer; padding: 1.5rem; }
+  summary::-webkit-details-marker { display: none; }
+  summary:focus-visible { outline: 3px solid currentColor; outline-offset: -7px; }
+  .variety-number { display: block; font-size: .75rem; }
+  .variety :global(.origin-image) { padding: 0; height: 330px; }
+  .variety :global(.origin-image .bottle) { width: 220px; height: 330px; transform: rotate(0deg); }
+  .variety-title { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+  h3 { font-size: clamp(1.5rem,2.5vw,3rem); letter-spacing: -.05em; font-weight: 600; overflow-wrap: anywhere; }
+  .variety-toggle { font-size: 2rem; font-weight: 400; flex-shrink: 0; transition: transform .2s; }
+  details[open] .variety-toggle { transform: rotate(45deg); }
+  .variety-hint { display: block; font-size: .65rem; margin-top: .7rem; }
+  .variety-details { overflow-wrap: anywhere; margin: 0 1.5rem; padding: 1.5rem 0; border-top: 1px solid currentColor; }
+  ul { list-style: none; padding: 0; margin: .75rem 0 1.5rem; font-size: 1.1rem; line-height: 1.5; }
+  dl { margin: 0 0 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
+  dt { font: .7rem var(--mono); }
+  dd { margin: .5rem 0 0; font-size: 1.1rem; }
+  @media(max-width: 900px) {
+    .picker-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .variety { border-bottom: var(--line); }
+    .variety:nth-child(2n) { border-right: 0; }
+    summary { padding: 1rem; }
+    .variety :global(.origin-image) { height: 230px; }
+    .variety :global(.origin-image .bottle) { height: 230px; width: 153px; }
+    .variety-details { overflow-wrap: anywhere; margin: 0 1rem; }
+    h3 { font-size: clamp(1.2rem,4vw,2rem); }
+  }
+  @media(max-width: 380px) {
+    .variety :global(.origin-image) { height: 190px; }
+    .variety :global(.origin-image .bottle) { height: 190px; width: 126px; }
+  }
+  @media(prefers-reduced-motion: reduce) { .variety-toggle { transition: none; } }
+</style>

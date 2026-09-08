@@ -7,8 +7,8 @@ import ColdBrewIcon from '../components/ColdBrewIcon.astro';
 import Arrow from '../components/Arrow.astro';
 import Bottle from '../components/Bottle.astro';
 import BottleMasks from '../components/BottleMasks.astro';
-import OriginRow from '../components/OriginRow.astro';
-import { origins, instagramUrl } from '../data/origins';
+import Collection from '../components/Collection.astro';
+import { instagramUrl } from '../data/origins';
 import pause from '../assets/pause.jpeg';
 import coast from '../assets/coast.jpeg';
 import '../styles/global.css';
@@ -119,45 +119,7 @@ const socialImage = new URL('/social-cover.png', Astro.site);
           ><span>ESPECIALIDAD</span>
         </div>
 
-        <section
-          class="collection"
-          id="origenes"
-          aria-labelledby="origins-title"
-        >
-          <div class="collection-index">
-            <div>
-              <p class="mono eyebrow">LA COLECCIÓN / 01—04</p><h2
-                id="origins-title"
-              >
-                Cuatro<br /> orígenes.
-              </h2><p class="collection-description">
-                Un mundo de notas.<br /> Encuentra tu favorito.
-              </p>
-            </div>
-            <nav aria-label="Índice de orígenes" class="origin-nav mono">
-              {
-                origins.map((origin) => (
-                  <a href={`#${origin.id}`}>
-                    <span>{origin.number}</span>
-                    {origin.name}
-                    <span aria-hidden="true">↗</span>
-                  </a>
-                ))
-              }
-            </nav>
-            <Arrow direction="down" class="index-arrow" />
-            <p class="index-footnote mono">
-              SOFT BREW COFFEE<br />CAFÉ DE ESPECIALIDAD
-            </p>
-          </div>
-          <div class="origin-list">
-            {
-              origins.map((origin, index) => (
-                <OriginRow origin={origin} reverse={index % 2 !== 0} />
-              ))
-            }
-          </div>
-        </section>
+        <Collection />
 
         <section class="pause" id="lado-frio" aria-labelledby="pause-title">
           <div class="pause-heading">
