@@ -28,7 +28,7 @@ const profileRows = [
       class="origin-tab"
       id={`tab-${origin.id}`}
       aria-controls={`panel-${origin.id}`}
-      aria-expanded={index === 0 ? 'true' : 'false'}
+      aria-expanded="false"
       data-origin={origin.id}
     >
       <span class="origin-tab-num">{origin.number}</span>
@@ -44,7 +44,7 @@ const profileRows = [
       role="tabpanel"
       aria-labelledby={`tab-${origin.id}`}
       data-origin={origin.id}
-      hidden={index !== 0}
+      hidden
       style={`--origin-color:${origin.color};--origin-ink:${origin.ink}`}
     >
       <figure class="detail-bottle">
@@ -395,6 +395,13 @@ const profileRows = [
     letter-spacing: 0.08em;
   }
 
+  .meter-track {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-self: start;
+    gap: 4px;
+    min-width: 0;
+  }
   .meter-track i {
     display: block;
     width: 18px;
