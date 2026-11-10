@@ -49,6 +49,7 @@ const tags = {
     border-bottom: 2px solid var(--ink);
   }
   .preps-heading h2 {
+    overflow-wrap: anywhere;
     font-size: clamp(2.5rem, 5vw, 5.5rem);
     font-weight: 600;
     letter-spacing: -0.055em;
@@ -78,6 +79,7 @@ const tags = {
   }
   .prep-head {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
     gap: 1rem;
@@ -97,6 +99,7 @@ const tags = {
     text-align: right;
   }
   .prep h3 {
+    overflow-wrap: anywhere;
     font-size: clamp(1.8rem, 3.2vw, 3rem);
     font-weight: 600;
     letter-spacing: -0.05em;
@@ -140,7 +143,8 @@ const tags = {
   .prep-steps li {
     counter-increment: step;
     display: grid;
-    grid-template-columns: 2.2rem 1fr;
+    grid-template-columns: 2.2rem minmax(0, 1fr);
+    overflow-wrap: anywhere;
     gap: 0.5rem;
   }
   .prep-steps li::before {
