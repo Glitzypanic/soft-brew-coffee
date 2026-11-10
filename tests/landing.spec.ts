@@ -77,6 +77,8 @@ test('keyboard skip link works and the page passes automated accessibility check
   await expect(page.getByRole('link', { name: 'Saltar al contenido' })).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#contenido$/);
+  // Let the title finish its fade-in so axe measures the final colors.
+  await expect(page.locator('.spec-title .word').last()).toHaveCSS('opacity', '1');
   const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
   expect(result.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(' | ')}`)).toEqual([]);
 });

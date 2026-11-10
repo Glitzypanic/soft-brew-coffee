@@ -62,8 +62,8 @@ const socialImage = new URL('/social-cover.png', Astro.site);
       <main id="contenido">
         <section class="spec" aria-labelledby="hero-title">
           <h1 id="hero-title" class="spec-title">
-            <span class="line"><span class="line-inner">Café de especialidad</span></span>
-            <span class="line line-2"><span class="line-inner">en frío.</span></span>
+            <span class="line"><span class="word" style="--i:0">Café</span> <span class="word" style="--i:1">de</span> <span class="word" style="--i:2">especialidad</span></span>
+            <span class="line line-2"><span class="word" style="--i:3">en</span> <span class="word" style="--i:4">frío.</span></span>
           </h1>
           <figure class="spec-photo">
             <Image
@@ -218,7 +218,7 @@ const socialImage = new URL('/social-cover.png', Astro.site);
     <script>
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-      // Count-up for the spec numbers, once on load.
+      // Count-up for the spec numbers.
       const counters = document.querySelectorAll<HTMLElement>('[data-count]');
       const runCount = (el: HTMLElement) => {
         const target = Number(el.dataset.count);
@@ -234,7 +234,23 @@ const socialImage = new URL('/social-cover.png', Astro.site);
         };
         requestAnimationFrame(step);
       };
-      counters.forEach(runCount);
+      // Count only when the figures scroll into view (matters on phones, where they sit below the fold).
+      if (!reduceMotion.matches) {
+        counters.forEach((el) => {
+          el.textContent = '0';
+        });
+        const counterObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              runCount(entry.target as HTMLElement);
+              counterObserver.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.5 },
+        );
+        counters.forEach((el) => counterObserver.observe(el));
+      }
 
       // Start the title reveal after the first paint, so the transition runs.
       window.setTimeout(() => document.documentElement.classList.add('is-ready'), 120);
