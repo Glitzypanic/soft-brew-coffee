@@ -61,28 +61,10 @@ test('name, bottle and details interpolate together and can reverse mid-flight',
   expect((await measure()).title).toBeCloseTo(start.title, 0);
 });
 
- test('upcoming varieties are static and retain their stickers', async ({ page }) => {
+test('the collection contains only Colombia and Perú', async ({ page }) => {
   await page.goto('/#origenes');
-  for (const id of ['honduras', 'costa-rica']) {
-    const card = page.locator(`article#${id}`);
-    await expect(card.locator('.drop-sticker')).toBeVisible();
-    await expect(card.locator('.variety-toggle, summary, .variety-details')).toHaveCount(0);
-    await card.click();
-    await expect(card).not.toHaveAttribute('open');
-  }
-});
-
-test('stickers stay inside their cards across desktop widths', async ({ page }) => {
-  await page.goto('/#origenes');
-  for (const width of [901, 1024, 1280, 1440, 1920]) {
-    await page.setViewportSize({ width, height: 900 });
-    for (const id of ['honduras', 'costa-rica']) {
-      const bounds = await page.locator(`#${id}`).evaluate(card => {
-        const region = card.querySelector('.origin-image')!.getBoundingClientRect();
-        const sticker = card.querySelector('.drop-sticker')!.getBoundingClientRect();
-        return { left: sticker.left - region.left, right: region.right - sticker.right, top: sticker.top - region.top, bottom: region.bottom - sticker.bottom };
-      });
-      for (const inset of Object.values(bounds)) expect(inset).toBeGreaterThanOrEqual(-1);
-    }
-  }
+  await expect(page.locator('.variety')).toHaveCount(2);
+  await expect(page.locator('#colombia, #peru')).toHaveCount(2);
+  await expect(page.locator('#honduras, #costa-rica, .drop-sticker')).toHaveCount(0);
+  await expect(page.locator('#origins-title')).toHaveText('Dos orígenes.');
 });

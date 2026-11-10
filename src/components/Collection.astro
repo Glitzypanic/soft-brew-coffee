@@ -1,171 +1,573 @@
 ---
 import Bottle from './Bottle.astro';
-import { Image } from 'astro:assets';
-import yellowSticker from '../assets/drop-soon-yellow.png';
-import greenSticker from '../assets/drop-soon-green.png';
-import { origins } from '../data/origins';
+import Arrow from './Arrow.astro';
+import { origins, formatCLP, whatsappOrderUrl } from '../data/origins';
+
+const items = origins.filter((origin) => !origin.comingSoon);
+const meses = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+const hoy = new Date();
+const fechaEnvasado = `${String(hoy.getDate()).padStart(2, '0')} ${meses[hoy.getMonth()]} ${hoy.getFullYear()}`;
+const scale = [1, 2, 3, 4, 5];
+const profileRows = [
+  { key: 'acidez', label: 'ACIDEZ' },
+  { key: 'cuerpo', label: 'CUERPO' },
+  { key: 'dulzor', label: 'DULZOR' },
+] as const;
 ---
 <section class="collection-picker" id="origenes" aria-labelledby="origins-title">
   <div class="picker-heading">
-    <p class="mono eyebrow">LA COLECCIÓN / 01—04</p>
-    <h2 id="origins-title">Cuatro orígenes.</h2>
-    <p>Un mundo de notas. Elige un botellín y descubre su carácter.</p>
+    <p class="mono eyebrow">LA COLECCIÓN / <span class="accent-number">01—02</span></p>
+    <h2 id="origins-title">Dos orígenes.</h2>
+    <p>Elige un botellín y revisa su sabor, su precio y cómo se pide.</p>
   </div>
-  <div class="picker-grid">
-    {origins.map(origin => {
-      const Card = origin.comingSoon ? 'article' : 'details';
-      const Heading = origin.comingSoon ? 'div' : 'summary';
-      return (
-      <Card class="variety" id={origin.id} style={`--origin-color:${origin.color};--origin-ink:${origin.ink}`}>
-        <Heading class="variety-summary" aria-label={origin.comingSoon ? undefined : `Ver características de ${origin.name}`} aria-describedby={origin.comingSoon ? `${origin.id}-soon` : undefined}>
-          <span class="variety-number mono">{origin.comingSoon ? `PRÓXIMO DROP / ${origin.number}` : `ORIGEN / ${origin.number}`}</span>
-          <span class="origin-image">
-            <Bottle origin={origin.id} name={origin.name}>
-            {origin.comingSoon && <span class="drop-sticker" role="img" id={`${origin.id}-soon`} aria-label="Próximamente disponible"><Image src={origin.id === 'honduras' ? greenSticker : yellowSticker} width={240} format="webp" quality={95} alt="" loading="lazy" /></span>}
-            </Bottle>
-          </span>
-          <span class="variety-title"><h3>{origin.comingSoon ? 'Próximamente' : origin.name}</h3>{!origin.comingSoon && <span class="variety-toggle" aria-hidden="true"><span class="toggle-glyph"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="2.5" /></svg></span></span>}</span>
-          {!origin.comingSoon && <span class="variety-hint mono">DESCUBRIR</span>}
-        </Heading>
-        {!origin.comingSoon && <div class="variety-details">
-          <p class="mono eyebrow">NOTAS</p>
-          <ul>{origin.notes.map(note => <li>{note}</li>)}</ul>
-          <dl>
-            <div><dt>INFUSIÓN</dt><dd>{origin.infusionHours} horas</dd></div>
+
+  {items.map((origin, index) => (
+    <div class="origin-item">
+    <button
+      type="button"
+      class="origin-tab"
+      id={`tab-${origin.id}`}
+      aria-controls={`panel-${origin.id}`}
+      aria-expanded={index === 0 ? 'true' : 'false'}
+      data-origin={origin.id}
+    >
+      <span class="origin-tab-num">{origin.number}</span>
+      <span class="origin-tab-name">{origin.name}</span>
+      <span class="origin-tab-meta mono">
+        <span class="origin-tab-price">{formatCLP(origin.priceCLP)}</span>
+        <span class="origin-tab-icon" aria-hidden="true"></span>
+      </span>
+    </button>
+    <article
+      class="origin-detail"
+      id={`panel-${origin.id}`}
+      role="tabpanel"
+      aria-labelledby={`tab-${origin.id}`}
+      data-origin={origin.id}
+      hidden={index !== 0}
+      style={`--origin-color:${origin.color};--origin-ink:${origin.ink}`}
+    >
+      <figure class="detail-bottle">
+        <Bottle origin={origin.id} name={origin.name} />
+      </figure>
+
+      <div class="detail-body">
+        <p class="mono detail-kicker">{origin.name} / {origin.number}</p>
+        <h3>{origin.name}.</h3>
+
+        <div class="detail-tabs" role="tablist" aria-label={`Detalle de ${origin.name}`}>
+          <button type="button" role="tab" class="detail-tab" aria-selected="true" aria-controls={`sabor-${origin.id}`} id={`tab-sabor-${origin.id}`} data-target="sabor">SABOR</button>
+          <button type="button" role="tab" class="detail-tab" aria-selected="false" aria-controls={`compra-${origin.id}`} id={`tab-compra-${origin.id}`} data-target="compra">COMPRA</button>
+        </div>
+
+        <div class="detail-sabor" id={`sabor-${origin.id}`} role="tabpanel" aria-labelledby={`tab-sabor-${origin.id}`}>
+          <p class="mono detail-label">NOTAS</p>
+          <ul class="detail-notes">
+            {origin.notes.map((note) => <li>{note}</li>)}
+          </ul>
+
+          <div class="detail-profile">
+            {profileRows.map((row) => (
+              <div class="meter">
+                <span class="mono meter-label">{row.label}</span>
+                <span class="meter-track" role="img" aria-label={`${row.label.toLowerCase()} ${origin.profile[row.key]} de 5`}>
+                  {scale.map((step) => <i class:list={[step <= origin.profile[row.key] && 'on']} />)}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <dl class="detail-facts mono">
+            <div><dt>INFUSIÓN</dt><dd>{origin.infusionHours} h</dd></div>
             <div><dt>FORMATO</dt><dd>200 ml</dd></div>
+            <div><dt>VARIETAL</dt><dd>Arábica</dd></div>
           </dl>
-        </div>}
-      </Card>
-    ); })}
+        </div>
+
+        <div class="detail-compra" id={`compra-${origin.id}`} role="tabpanel" aria-labelledby={`tab-compra-${origin.id}`} hidden>
+          <p class="detail-price"><span class="mono">PRECIO</span><strong>{formatCLP(origin.priceCLP)}</strong></p>
+          <dl class="detail-facts mono">
+            <div><dt>FORMATO</dt><dd>200 ml</dd></div>
+            <div><dt>ENVASADO</dt><dd>{fechaEnvasado}</dd></div>
+            <div><dt>CONSERVACIÓN</dt><dd>Refrigerado</dd></div>
+          </dl>
+          <a class="detail-cta mono" href={whatsappOrderUrl(origin)} target="_blank" rel="noopener noreferrer">
+            <span>PEDIR POR WHATSAPP</span> <Arrow />
+          </a>
+        </div>
+      </div>
+    </article>
+    </div>
+  ))}
+
+  <div class="buy-bar" aria-hidden="true">
+    <span class="mono buy-bar-name">{items[0].name}</span>
+    <strong class="buy-bar-price">{formatCLP(items[0].priceCLP)}</strong>
+    <a class="buy-bar-cta mono" href={whatsappOrderUrl(items[0])} target="_blank" rel="noopener noreferrer" tabindex="-1">PEDIR <Arrow /></a>
   </div>
 </section>
-<script>
-  import { animate } from 'motion/mini';
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const cards = document.querySelectorAll<HTMLDetailsElement>('details.variety');
-  const openers = new Map<string, () => void>();
-  cards.forEach(card => {
-    const summary = card.querySelector('summary')!;
-    const bottle = card.querySelector<HTMLElement>('.bottle')!;
-    const content = card.querySelector<HTMLElement>('.variety-details')!;
-    const pieces = [bottle, ...card.querySelectorAll<HTMLElement>('h3, .variety-hint, .variety-number')];
-    let expanded = card.open;
-    let revision = 0;
-    let animations: ReturnType<typeof animate>[] = [];
-    card.dataset.enhanced = '';
-    function setExpanded(next: boolean) {
-      const current = ++revision;
-      expanded = next;
-      // Capture the visible state before interrupting, including an unfinished transition.
-      const cardHeight = card.getBoundingClientRect().height;
-      const before = pieces.map(element => element.getBoundingClientRect());
-      const opacity = getComputedStyle(content).opacity;
-      const contentTransform = getComputedStyle(content).transform;
-      animations.forEach(animation => animation.stop());
-      pieces.forEach(element => element.style.removeProperty('transform'));
-      card.open = true;
-      card.dataset.expanded = String(next);
-      content.inert = !next;
-      card.style.minHeight = `${Math.max(cardHeight, summary.offsetHeight, next ? content.scrollHeight : 0)}px`;
-      const duration = reducedMotion.matches ? 0 : 1.1;
-      const ease = [.4, 0, .2, 1] as const;
-      animations = pieces.map((element, index) => {
-        const from = before[index];
-        const to = element.getBoundingClientRect();
-        const x = from.left - to.left;
-        const y = from.top - to.top;
-        const scale = element.matches('.bottle, h3') && to.width ? from.width / to.width : 1;
-        return animate(element, {
-          transform: [`translate(${x}px, ${y}px) scale(${scale})`, 'translate(0px, 0px) scale(1)'],
-        }, { duration, ease });
-      });
-      animations.push(animate(content, {
-        opacity: [opacity, next ? 1 : 0],
-        transform: [contentTransform === 'none' ? 'translateX(32px)' : contentTransform, next ? 'translateX(0px)' : 'translateX(32px)'],
-      }, { duration, ease }));
-      // The icon rotates inside its moving wrapper, on the same clock as the composition.
-      animations.push(animate(card.querySelector<HTMLElement>('.toggle-glyph')!, {
-        transform: `rotate(${next ? 45 : 0}deg)`,
-      }, { duration, ease }));
-      animations[0].then(() => {
-        if (revision !== current) return;
-        card.open = next;
-        if (!next) card.style.removeProperty('min-height');
-        pieces.forEach(element => element.style.removeProperty('transform'));
-      });
-    }
-    summary.addEventListener('click', event => {
-      event.preventDefault();
-      void setExpanded(!expanded);
-    });
-    openers.set(card.id, () => { if (!expanded) void setExpanded(true); });
-  });
-  function revealOrigin() { openers.get(location.hash.slice(1))?.(); }
-  revealOrigin();
-  window.addEventListener('hashchange', revealOrigin);
-</script>
-<style>
-  .collection-picker { overflow-wrap: anywhere; background: var(--ink); color: var(--grey); border-bottom: var(--line); }
-  .picker-heading { padding: 2rem var(--gutter) 1.75rem; }
-  .picker-heading h2 { font-size: clamp(2.5rem, 5vw, 5.5rem); font-weight: 600; letter-spacing: -.055em; margin: .65rem 0; }
-  .picker-heading > p:last-child { font-size: 1.125rem; line-height: 1.5; }
-  .picker-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); align-items: stretch; }
-  .variety { overflow: clip; position: relative; background: var(--origin-color); color: var(--origin-ink); min-width: 0; border-right: var(--line); }
-  .variety:not([data-enhanced])[open] { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
-  .variety::details-content { min-width: 0; }
-  .variety[data-expanded="true"] .variety-summary { min-width: 0; padding-right: .5rem; }
-  .variety[data-expanded="true"] :global(.origin-image .bottle) { max-width: 100%; height: auto; aspect-ratio: 2 / 3; }
-  .variety[data-expanded="true"] :global(.bottle img) { object-fit: contain; }
-  .variety[open] .variety-details { margin: 0; padding: 1.5rem 1rem; border-top: 0; }
-  .variety[data-expanded="true"] h3 { font-size: clamp(1.1rem, 1.8vw, 1.85rem); }
-  .variety:last-child { border-right: 0; }
-  .variety-summary { list-style: none; cursor: pointer; padding: 1.5rem; }
-  article .variety-summary { cursor: default; }
-  .variety-summary::-webkit-details-marker { display: none; }
-  .variety-summary:focus-visible { outline: 3px solid currentColor; outline-offset: -7px; }
-  .variety-number { display: block; font-size: .75rem; }
-  .variety :global(.origin-image) { padding: 0; height: 330px; }
-  .variety :global(.origin-image .bottle) { position: relative; width: 220px; height: 330px; transform: rotate(0deg); }
-  .origin-image { position: relative; }
-  article.variety :global(.origin-image .bottle) { max-width: 100%; height: auto; }
-  .drop-sticker { position: absolute; top: 8%; left: 56%; z-index: 1; display: grid; place-items: center; width: 44%; aspect-ratio: 1; color: #111; pointer-events: none; isolation: isolate; filter: drop-shadow(1px 2px 1px #17152b30); }
-  .drop-sticker :global(img) { display: block; width: 100%; height: auto; object-fit: contain; }
-  .variety-title { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
-  h3 { font-size: clamp(1.5rem,2.5vw,3rem); letter-spacing: -.05em; font-weight: 600; overflow-wrap: anywhere; }
-  .variety-toggle { position: absolute; top: 1.5rem; right: 1.5rem; z-index: 2; font-size: 1.5rem; font-weight: 400; }
-  .toggle-glyph { display: block; width: 1em; height: 1em; transform-origin: 50% 50%; }
-  .toggle-glyph svg { display: block; width: 100%; height: 100%; }
-  .variety[data-enhanced] :global(.origin-image) { overflow: visible; }
-  .variety[data-enhanced] .variety-summary { width: 100%; }
-  .variety[data-expanded="true"] .variety-summary { width: 55%; }
-  .variety[data-enhanced] .variety-details { position: absolute; left: 55%; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; margin: 0; padding: 4rem 1rem 1.5rem; border: 0; opacity: 0; transform: translateX(32px); }
-  .variety[data-enhanced] :is(h3, .variety-number, .variety-hint), .variety[data-enhanced] :global(.bottle) { transform-origin: top left; }
-  .variety[data-enhanced] h3 { white-space: nowrap; }
 
-  .variety-hint { display: block; font-size: .65rem; margin-top: .7rem; }
-  .variety-details { min-width: 0; overflow-wrap: anywhere; margin: 0 1.5rem; padding: 1.5rem 0; border-top: 1px solid currentColor; }
-  ul, dd { font-family: var(--mono); }
-  ul { list-style: none; padding: 0; margin: .75rem 0 1.5rem; font-size: 1rem; line-height: 1.5; }
-  dl { margin: 0 0 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
-  dt { font: .7rem var(--mono); }
-  dd { margin: .5rem 0 0; font-size: 1rem; }
-  @media(max-width: 900px) {
-    .picker-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-    .variety { border-bottom: var(--line); }
-    .variety:nth-child(2n) { border-right: 0; }
-    .variety-summary { padding: 1rem; }
-    .variety-toggle { top: 1rem; right: 1rem; }
-    .variety :global(.origin-image) { height: 230px; }
-    .variety :global(.origin-image .bottle) { height: 230px; width: 153px; }
-    .variety-details { min-width: 0; overflow-wrap: anywhere; margin: 0 1rem; }
-    h3 { font-size: clamp(1.2rem,4vw,2rem); }
+<script>
+  const section = document.querySelector<HTMLElement>('#origenes');
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.origin-tab');
+  const details = document.querySelectorAll<HTMLElement>('.origin-detail');
+  const buyBar = document.querySelector<HTMLElement>('.buy-bar');
+  const buyName = buyBar?.querySelector<HTMLElement>('.buy-bar-name');
+  const buyPrice = buyBar?.querySelector<HTMLElement>('.buy-bar-price');
+  const buyCta = buyBar?.querySelector<HTMLAnchorElement>('.buy-bar-cta');
+
+  function selectOrigin(id: string) {
+    const tab = [...tabs].find((t) => t.dataset.origin === id);
+    if (!tab) return;
+    tabs.forEach((t) => t.setAttribute('aria-expanded', String(t === tab)));
+    details.forEach((panel) => {
+      panel.hidden = panel.dataset.origin !== id;
+    });
+    const active = document.querySelector<HTMLElement>(`#panel-${id}`);
+    if (!active || !buyBar) return;
+    if (buyName) buyName.textContent = tab.querySelector('.origin-tab-name')?.textContent ?? '';
+    if (buyPrice) buyPrice.textContent = tab.querySelector('.origin-tab-price')?.textContent ?? '';
+    if (buyCta) buyCta.href = active.querySelector<HTMLAnchorElement>('.detail-cta')?.href ?? '#';
   }
-  @media(max-width: 560px) {
-    .picker-grid { grid-template-columns: 1fr; }
+
+  // Clicking the open origin closes it; clicking any other origin opens that one.
+  function closeAll() {
+    tabs.forEach((t) => t.setAttribute('aria-expanded', 'false'));
+    details.forEach((panel) => {
+      panel.hidden = true;
+    });
   }
-  @media(max-width: 380px) {
-    .variety :global(.origin-image) { height: 190px; }
-    .variety :global(.origin-image .bottle) { height: 190px; width: 126px; }
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      if (tab.getAttribute('aria-expanded') === 'true') closeAll();
+      else selectOrigin(tab.dataset.origin!);
+    });
+  });
+
+  details.forEach((panel) => {
+    const buttons = panel.querySelectorAll<HTMLButtonElement>('.detail-tab');
+    const sabor = panel.querySelector<HTMLElement>('.detail-sabor');
+    const compra = panel.querySelector<HTMLElement>('.detail-compra');
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        buttons.forEach((b) => b.setAttribute('aria-selected', String(b === button)));
+        if (sabor) sabor.hidden = button.dataset.target !== 'sabor';
+        if (compra) compra.hidden = button.dataset.target !== 'compra';
+      });
+    });
+  });
+
+  // Deep links such as #peru open that origin directly.
+  const fromHash = location.hash.slice(1);
+  if (fromHash) selectOrigin(fromHash);
+  window.addEventListener('hashchange', () => selectOrigin(location.hash.slice(1)));
+
+  // Mobile buy bar only while the collection is on screen.
+  if (section && buyBar) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        buyBar.classList.toggle('is-visible', entry.isIntersecting);
+        buyBar.setAttribute('aria-hidden', String(!entry.isIntersecting));
+        if (buyCta) buyCta.tabIndex = entry.isIntersecting ? 0 : -1;
+      },
+      { threshold: 0.15 },
+    );
+    observer.observe(section);
   }
-  @media(prefers-reduced-motion: reduce) { .variety-toggle { transition: none; } }
+</script>
+
+<style>
+  .collection-picker {
+    overflow-wrap: anywhere;
+    background: var(--ink);
+    color: var(--grey);
+    border-bottom: 2px solid var(--ink);
+  }
+  .picker-heading {
+    padding: 2.5rem var(--gutter);
+  }
+  .picker-heading h2 {
+    font-size: clamp(2.5rem, 5vw, 5.5rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    margin: 0.65rem 0;
+  }
+  .picker-heading > p:last-child {
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+
+  /* Origin selector: two hard blocks, the active one fills with its color. */
+  .origin-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 2px solid var(--grey);
+    border-bottom: 2px solid var(--grey);
+  }
+  /* Editorial index: one full-width row per origin, its panel opens right below. */
+  .origin-item {
+    border-top: 2px solid var(--grey);
+  }
+  .origin-item:last-child {
+    border-bottom: 2px solid var(--grey);
+  }
+  .origin-item .origin-detail {
+    border-bottom: 0;
+  }
+  /* Subtle entrance each time a panel opens. */
+  .origin-detail:not([hidden]) {
+    animation: detail-in 0.35s ease-out both;
+  }
+  @keyframes detail-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .origin-tab {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.5rem var(--gutter) 1.5rem calc(var(--gutter) + 1.25rem);
+    background: transparent;
+    color: var(--grey);
+    border: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .origin-tab-num {
+    font-family: var(--sans);
+    font-size: clamp(1.25rem, 2.4vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+  .origin-tab-name {
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    line-height: 0.95;
+    white-space: nowrap;
+  }
+  .origin-tab-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+  }
+  .origin-tab-price {
+    opacity: 0.75;
+  }
+  .origin-tab-icon::before {
+    content: '+';
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+  .origin-tab[aria-expanded='true'] .origin-tab-icon::before {
+    content: '−';
+  }
+  .origin-tab:hover {
+    background: #2a2c2b;
+  }
+  .origin-tab[aria-expanded='true'] {
+    background: var(--grey);
+    color: var(--ink);
+  }
+  .origin-tab[aria-expanded='true'] .origin-tab-price {
+    opacity: 1;
+  }
+  .origin-tab:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: -6px;
+  }
+
+  /* Detail panel: colored block, bottle on the left, facts on the right. */
+  .origin-detail {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    background: var(--origin-color);
+    color: var(--origin-ink);
+    border-bottom: 2px solid var(--grey);
+  }
+  .origin-detail[hidden] {
+    display: none;
+  }
+  .detail-bottle {
+    margin: 0;
+    display: grid;
+    place-items: center;
+    padding: 2.5rem var(--gutter);
+    border-right: 2px solid var(--origin-ink);
+  }
+  .detail-bottle :global(.bottle) {
+    display: block;
+    width: min(100%, 300px);
+    aspect-ratio: 2 / 3;
+    height: auto;
+  }
+  .detail-bottle :global(.bottle img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .detail-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 2.5rem var(--gutter);
+    min-width: 0;
+  }
+  .detail-kicker {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+  .detail-body h3 {
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    line-height: 0.95;
+  }
+  .detail-tabs {
+    display: flex;
+    border: 2px solid var(--origin-ink);
+    width: fit-content;
+  }
+  .detail-tab {
+    padding: 0.6rem 1.1rem;
+    background: transparent;
+    color: inherit;
+    border: 0;
+    font: inherit;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+  .detail-tab + .detail-tab {
+    border-left: 2px solid var(--origin-ink);
+  }
+  .detail-tab[aria-selected='true'] {
+    background: var(--origin-ink);
+    color: var(--origin-color);
+  }
+  .detail-tab:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+  }
+  .detail-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+  .detail-notes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.25rem;
+    font-family: var(--sans);
+    font-size: clamp(1.4rem, 2.6vw, 2.4rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+  .detail-profile {
+    display: grid;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+  .meter {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    align-items: center;
+    gap: 1rem;
+  }
+  .meter-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+  .meter-track {
+    display: inline-flex;
+    gap: 4px;
+  }
+  .meter-track i {
+    display: block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid currentColor;
+  }
+  .meter-track i.on {
+    background: currentColor;
+  }
+  .detail-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    margin: 0;
+    padding-top: 1rem;
+    border-top: 2px solid currentColor;
+  }
+  .detail-facts dt {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+  }
+  .detail-facts dd {
+    margin: 0.3rem 0 0;
+    font-size: 1rem;
+  }
+  .detail-sabor {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .detail-compra {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .detail-compra[hidden],
+  .detail-sabor[hidden] {
+    display: none;
+  }
+  .detail-price {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .detail-price .mono {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+  .detail-price strong {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+  }
+  .detail-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-self: flex-start;
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--origin-ink);
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    box-shadow: 6px 6px 0 var(--origin-ink);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .detail-cta:hover,
+  .detail-cta:focus-visible {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 var(--origin-ink);
+  }
+  .detail-cta:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 4px;
+  }
+  .detail-cta :global(svg) {
+    width: 1.1em;
+    height: 1.1em;
+    flex: none;
+  }
+
+  /* Mobile buy bar: hidden until the collection is on screen. */
+  .buy-bar {
+    display: none;
+  }
+  @media (max-width: 900px) {
+    .origin-detail {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .detail-bottle {
+      border-right: 0;
+      border-bottom: 2px solid var(--origin-ink);
+      padding: 2rem var(--gutter);
+    }
+    .detail-bottle :global(.bottle) {
+      width: min(60%, 240px);
+    }
+  }
+  @media (max-width: 700px) {
+    .origin-tab {
+      grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+      gap: 0.6rem;
+      padding: 1.25rem 1rem 1.25rem 1.1rem;
+    }
+    .origin-tab-num {
+      font-size: 1.1rem;
+    }
+    .origin-tab-name {
+      font-size: clamp(1.75rem, 9vw, 2.6rem);
+    }
+    .origin-tab-meta {
+      gap: 0.6rem;
+      font-size: 0.65rem;
+    }
+    .detail-body {
+      padding: 2rem 1.25rem;
+    }
+    .buy-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 45;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--ink);
+      color: var(--grey);
+      border-top: 2px solid var(--grey);
+      transform: translateY(110%);
+      transition: transform 0.3s ease;
+    }
+    .buy-bar.is-visible {
+      transform: translateY(0);
+    }
+    .buy-bar-name {
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+    }
+    .buy-bar-price {
+      margin-left: auto;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .buy-bar-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.7rem 0.9rem;
+      background: var(--accent);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 0.75rem;
+    }
+    .buy-bar-cta :global(svg) {
+      width: 1em;
+      height: 1em;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .buy-bar,
+    .detail-cta {
+      transition: none;
+    }
+    .origin-detail:not([hidden]) {
+      animation: none;
+    }
+  }
 </style>

@@ -1,12 +1,14 @@
 ---
 import '@fontsource/jetbrains-mono/latin-400.css';
 import '@fontsource/jetbrains-mono/latin-500.css';
+import '@fontsource/doto/latin-700.css';
 import { Image } from 'astro:assets';
 import Arrow from '../components/Arrow.astro';
-import Bottle from '../components/Bottle.astro';
 import BottleMasks from '../components/BottleMasks.astro';
 import Collection from '../components/Collection.astro';
-import { instagramUrl } from '../data/origins';
+import Preparations from '../components/Preparations.astro';
+import { whatsappNumber } from '../data/origins';
+import heroFlatlay from '../assets/hero-flatlay.jpg';
 import pause from '../assets/pause.jpeg';
 import coast from '../assets/coast.jpeg';
 import '../styles/global.css';
@@ -21,7 +23,7 @@ const socialImage = new URL('/social-cover.png', Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Soft Brew Coffee. Cold brew de especialidad en botellines de 200 ml. Descubre Colombia, Perú, Honduras y Costa Rica."
+      content="Soft Brew Coffee. Cold brew de especialidad en botellines de 200 ml. Descubre Colombia y Perú."
     />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonical} />
@@ -29,23 +31,24 @@ const socialImage = new URL('/social-cover.png', Astro.site);
     <meta property="og:locale" content="es_CL" />
     <meta property="og:site_name" content="Soft Brew Coffee" />
     <meta property="og:title" content="Soft Brew Coffee — El lado frío del café" />
-    <meta property="og:description" content="Cuatro orígenes. Café de especialidad en frío, en botellines de 200 ml." />
+    <meta property="og:description" content="Dos orígenes. Café de especialidad en frío, en botellines de 200 ml." />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
     <meta property="og:image:alt" content="Soft Brew Coffee: café de especialidad, una nueva perspectiva." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#D9D218" />
+    <meta name="theme-color" content="#E9E6DB" />
     <link rel="icon" type="image/svg+xml" href="/brand/keep-cold.svg" />
     <title>Soft Brew Coffee — El lado frío del café</title>
+    <script is:inline>document.documentElement.classList.add('js-reveal');</script>
   </head>
   <body>
     <BottleMasks />
     <a class="skip-link mono" href="#contenido">Saltar al contenido</a>
     <div class="site-frame" id="inicio">
       <header class="masthead">
-        <a class="wordmark" href="#inicio" aria-label="Soft Brew Coffee, inicio"
-          >SOFT BREW COFFEE</a
-        >
+        <a class="masthead-brand" href="#inicio" aria-label="Soft Brew Coffee, inicio">
+          <img src="/brand/brew-symbol.svg" alt="" width="158" height="198" />
+        </a>
         <span class="masthead-caption mono"
           >CAFÉ DE ESPECIALIDAD / COLD BREW</span
         >
@@ -57,55 +60,55 @@ const socialImage = new URL('/social-cover.png', Astro.site);
       </header>
 
       <main id="contenido">
-        <section class="hero" aria-labelledby="hero-title">
-          <div class="hero-brand">
-            <span class="hero-color-mark hero-color-mark--pink" aria-hidden="true"></span>
-            <span class="hero-color-mark hero-color-mark--blue" aria-hidden="true"></span>
-            <p class="mono eyebrow">BUEN CAFÉ. EN FRÍO.</p>
-            <h1 id="hero-title">
-              <span class="hero-title-line">Soft Brew</span>
-              <span class="hero-title-line hero-title-line--accent">Coffee</span>
-              <span class="hero-title-sub mono">COLD BREW / ESPECIALIDAD</span>
-            </h1>
-            <div class="hero-intro">
-              <p>Café de especialidad.<br />Una nueva perspectiva.</p><a
-                href="#origenes"
-                class="round-link"
-                aria-label="Descubrir los cuatro orígenes"
-                ><Arrow direction="down" /></a
-              >
-            </div>
-            <p class="hero-origin-note mono">04 ORÍGENES <span aria-hidden="true">/</span> 01 LADO FRÍO</p>
-          </div>
-          <div class="hero-stage">
-            <p class="stage-label mono">CUATRO ORÍGENES.<br />UN LADO FRÍO.</p>
-            <div class="hero-bottles">
-              <Bottle
-                origin="colombia"
-                name="Colombia"
-                context="hero"
-                eager
-                class="hero-bottle hero-bottle--colombia"
-              /><Bottle
-                origin="peru"
-                name="Perú"
-                context="hero"
-                eager
-                class="hero-bottle hero-bottle--peru"
-              />
-            </div>
-            <img
-              class="cold-seal"
-              src="/brand/keep-cold.svg"
-              alt="Mantener frío"
-              width="130"
-              height="130"
+        <section class="spec" aria-labelledby="hero-title">
+          <h1 id="hero-title" class="spec-title">
+            <span class="line"><span class="line-inner">Café de especialidad</span></span>
+            <span class="line line-2"><span class="line-inner">en frío.</span></span>
+          </h1>
+          <figure class="spec-photo">
+            <Image
+              src={heroFlatlay}
+              alt="Dos botellines de cold brew, Perú y Colombia, sobre una mesa de madera con granos de café"
+              width={1372}
+              widths={[480, 800, 1200, 1372]}
+              sizes="(max-width: 700px) 100vw, 58vw"
+              format="webp"
+              quality={88}
+              loading="eager"
+              fetchpriority="high"
             />
-            <span class="stage-volume mono">200 ML / COLD BREW</span>
+            <figcaption class="mono"><span><span class="accent-number">02</span> ORÍGENES</span> <span>200 ML · COLD BREW</span></figcaption>
+          </figure>
+          <div class="spec-data">
+            <div class="spec-cell spec-volume">
+              <p class="mono">FORMATO</p>
+              <p class="spec-figure"><strong class="count" data-count="200">200</strong><span>ML</span></p>
+              <p class="mono">BOTELLÍN · COLD BREW</p>
+            </div>
+            <div class="spec-row">
+              <div class="spec-cell">
+                <p class="mono"><span class="accent-number">02</span> PERÚ</p>
+                <p class="spec-figure"><strong class="count" data-count="16">16</strong><span>H</span></p>
+                <p class="mono">INFUSIÓN</p>
+              </div>
+              <div class="spec-cell">
+                <p class="mono"><span class="accent-number">01</span> COLOMBIA</p>
+                <p class="spec-figure"><strong class="count" data-count="24">24</strong><span>H</span></p>
+                <p class="mono">INFUSIÓN</p>
+              </div>
+            </div>
+            <div class="spec-cell spec-intro">
+              <p>Una nueva perspectiva para el café de especialidad.</p>
+              <a href="#origenes" class="spec-link" aria-label="Descubrir los dos orígenes"><Arrow direction="down" /></a>
+            </div>
+            <div class="spec-cell spec-brand">
+              <img src="/brand/soft-brew-coffee.svg" alt="Soft Brew Coffee" width="601" height="429" />
+              <p class="mono">BUEN CAFÉ. EN FRÍO.</p>
+            </div>
           </div>
         </section>
 
-<Collection />
+        <Collection />
 
         <section class="pause" id="lado-frio" aria-labelledby="pause-title">
           <div class="pause-heading">
@@ -113,69 +116,169 @@ const socialImage = new URL('/social-cover.png', Astro.site);
               Café de especialidad.<br /><span>Otra forma de disfrutarlo.</span>
             </h2><Arrow class="pause-arrow" />
           </div>
-          <div class="pause-photos">
-            <figure class="glass-photo">
-              <Image
-                src={pause}
-                width={1200}
-                alt="Botellín de Perú junto a un vaso con hielo y una rodaja de cítrico, sobre una mesa de madera"
-                widths={[480, 800, 1200]}
-                sizes="(max-width: 700px) 100vw, 60vw"
-                format="webp"
-                quality={85}
-                loading="lazy"
-              /><figcaption class="mono">
-                <span>01 / UNA PAUSA</span><span>SOFT BREW COFFEE</span>
-              </figcaption>
-            </figure>
-            <figure class="coast-photo">
-              <Image
-                src={coast}
-                width={1000}
-                alt="Botellín de Colombia en una mano frente al mar"
-                widths={[480, 800, 1000]}
-                sizes="(max-width: 700px) 100vw, 40vw"
-                format="webp"
-                quality={85}
-                loading="lazy"
-              /><figcaption class="mono">
-                <span>02 / SIN PRISA</span><span>AL LADO DEL MAR</span>
-              </figcaption>
-            </figure>
+          <div class="pin" data-pin>
+          <div class="pin-stage">
+          <div class="pause-moments">
+            <article class="moment">
+              <figure class="moment-photo">
+                <Image
+                  src={pause}
+                  width={1200}
+                  alt="Botellín de Perú junto a un vaso con hielo y una rodaja de cítrico, sobre una mesa de madera"
+                  widths={[480, 800, 1200]}
+                  sizes="(max-width: 700px) 100vw, 60vw"
+                  format="webp"
+                  quality={85}
+                  loading="lazy"
+                />
+                <figcaption class="mono"><span>PERÚ</span><span>SOFT BREW COFFEE</span></figcaption>
+              </figure>
+              <div class="moment-copy moment-copy-peru">
+                <span class="moment-num">01</span>
+                <h3>Tarde de avellana</h3>
+                <p>Infusión de 16 horas. Avellana tostada y chocolate, servido con hielo y una rodaja de limón.</p>
+                <p class="mono moment-meta">Avellana tostada · Chocolate · 200 ml</p>
+              </div>
+            </article>
+            <article class="moment moment-reverse">
+              <div class="moment-copy moment-copy-colombia">
+                <span class="moment-num">02</span>
+                <h3>Para llevar</h3>
+                <p>Infusión de 24 horas. Chocolate dulce y caramelo en 200 ml, para el bolso, la playa o el camino.</p>
+                <p class="mono moment-meta">Chocolate dulce · Caramelo · 200 ml</p>
+              </div>
+              <figure class="moment-photo">
+                <Image
+                  src={coast}
+                  width={1000}
+                  alt="Botellín de Colombia en una mano frente al mar"
+                  widths={[480, 800, 1000]}
+                  sizes="(max-width: 700px) 100vw, 40vw"
+                  format="webp"
+                  quality={85}
+                  loading="lazy"
+                />
+                <figcaption class="mono"><span>COLOMBIA</span><span>AL LADO DEL MAR</span></figcaption>
+              </figure>
+            </article>
+          </div>
+          </div>
           </div>
         </section>
+        <Preparations />
       </main>
 
       <footer class="footer" id="instagram">
-        <div class="footer-top">
-          <h2>Sigue el lado<br /><span>frío del café.</span></h2><div
-            class="social-block"
-          >
-            {
-              instagramUrl ? (
-                <a
-                  class="instagram-link mono"
-                  href={instagramUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  INSTAGRAM <Arrow />
-                </a>
-              ) : (
-                <span class="instagram-label mono">INSTAGRAM</span>
-              )
-            }<p class="mono">SOFT BREW COFFEE</p>
+        <div class="footer-header mono">
+          <span>CAFÉ DE ESPECIALIDAD / EN FRÍO</span>
+          <span><span class="accent-number">02</span> ORÍGENES · <span class="accent-number">200</span> ML</span>
+        </div>
+        <div class="footer-feature">
+          <div class="footer-statement">
+            <p class="mono">UNA PAUSA DIFERENTE.</p>
+            <h2>EL CAFÉ<br />SE TOMA<br />SU TIEMPO.</h2>
+            <p class="footer-note">Cold brew para disfrutar el momento.</p>
           </div>
         </div>
-        <div class="footer-brand" aria-hidden="true">
-          <span>SOFT BREW</span><span>COFFEE</span>
+        <div class="footer-marquee" aria-label="Buen café. En frío.">
+          <div class="footer-marquee-track">
+            <p class="footer-marquee-group">
+              <span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span>
+            </p>
+            <p class="footer-marquee-group" aria-hidden="true">
+              <span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span>
+            </p>
+          </div>
         </div>
         <div class="footer-bottom mono">
-          <span>CAFÉ DE ESPECIALIDAD / 200 ML</span><a href="#inicio"
-            >VOLVER ARRIBA ↑</a
-          >
+          <div class="footer-brand">
+            <img
+              src="/brand/soft-brew-coffee.svg"
+              alt="Soft Brew Coffee: logotipo original con tetera y V60"
+              width="601"
+              height="429"
+              loading="lazy"
+            />
+          </div>
+          <div class="footer-social">
+            <span>CONTACTO</span>
+            <a
+              class="instagram-link mono"
+              href={`https://wa.me/${whatsappNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WHATSAPP <Arrow />
+            </a>
+          </div>
+          <a class="footer-return" href="#inicio">VOLVER ARRIBA <span aria-hidden="true">↑</span></a>
         </div>
       </footer>
     </div>
+    <script>
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      // Count-up for the spec numbers, once on load.
+      const counters = document.querySelectorAll<HTMLElement>('[data-count]');
+      const runCount = (el: HTMLElement) => {
+        const target = Number(el.dataset.count);
+        if (reduceMotion.matches) return;
+        const duration = 1100;
+        const start = performance.now();
+        el.textContent = '0';
+        const step = (now: number) => {
+          const t = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = String(Math.round(target * eased));
+          if (t < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+      counters.forEach(runCount);
+
+      // Start the title reveal after the first paint, so the transition runs.
+      window.setTimeout(() => document.documentElement.classList.add('is-ready'), 120);
+
+      // Pinned horizontal scroll for the moments, desktop only.
+      const pin = document.querySelector<HTMLElement>('[data-pin]');
+      const track = pin?.querySelector<HTMLElement>('.pause-moments');
+      const desktop = window.matchMedia('(min-width: 701px)');
+
+      const layout = () => {
+        if (!pin || !track) return;
+        const enabled = desktop.matches && !reduceMotion.matches;
+        pin.classList.toggle('is-pinned', enabled);
+        if (!enabled) {
+          pin.style.height = '';
+          track.style.transform = '';
+          return;
+        }
+        const scrollable = Math.max(track.scrollWidth - window.innerWidth, 0);
+        pin.style.height = `${scrollable + window.innerHeight}px`;
+        update();
+      };
+
+      const update = () => {
+        if (!pin || !track || !pin.classList.contains('is-pinned')) return;
+        const scrollable = Math.max(track.scrollWidth - window.innerWidth, 1);
+        const range = pin.offsetHeight - window.innerHeight;
+        const progress = Math.min(Math.max(-pin.getBoundingClientRect().top / range, 0), 1);
+        track.style.transform = `translate3d(${-progress * scrollable}px, 0, 0)`;
+      };
+
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          update();
+          ticking = false;
+        });
+      }, { passive: true });
+      window.addEventListener('resize', layout);
+      desktop.addEventListener('change', layout);
+      reduceMotion.addEventListener('change', layout);
+      layout();
+    </script>
   </body>
 </html>
