@@ -171,6 +171,7 @@ a {
   color: var(--ink);
 }
 .spec-title {
+  overflow-wrap: anywhere;
   grid-column: 1 / -1;
   padding: clamp(1.5rem, 3vw, 2.5rem) var(--gutter);
   border-bottom: 2px solid var(--ink);
@@ -258,7 +259,7 @@ a {
 }
 .spec-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   border-bottom: 2px solid var(--ink);
 }
 .spec-row .spec-cell {
@@ -270,7 +271,7 @@ a {
 .spec-figure {
   font-family: var(--sans);
   font-weight: 600;
-  font-size: clamp(4rem, 7.4vw, 7.5rem);
+  font-size: min(7.4vw, 7.5rem);
   line-height: 0.8;
   letter-spacing: -0.06em;
 }
@@ -281,17 +282,19 @@ a {
   vertical-align: top;
 }
 .spec-volume .spec-figure {
-  font-size: clamp(5.5rem, 10vw, 10rem);
+  font-size: min(10vw, 10rem);
 }
 .spec-row .spec-figure {
-  font-size: clamp(3.5rem, 6vw, 6rem);
+  font-size: min(6vw, 6rem);
 }
 .spec-data .mono {
   font-size: 0.75rem;
   letter-spacing: 0.06em;
+  overflow-wrap: anywhere;
 }
 .spec-intro {
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
 }
 .spec-intro p {
@@ -358,10 +361,10 @@ a {
     padding: 1.25rem;
   }
   .spec-volume .spec-figure {
-    font-size: clamp(4.5rem, 26vw, 6.5rem);
+    font-size: min(26vw, 6.5rem);
   }
   .spec-row .spec-figure {
-    font-size: clamp(3rem, 16vw, 4.5rem);
+    font-size: min(16vw, 4.5rem);
   }
 }
 .bottle-masks {
@@ -601,6 +604,7 @@ a {
 }
 .moment-photo figcaption {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 1rem;
   padding: 0.7rem 1rem;
@@ -635,6 +639,7 @@ a {
   color: var(--ink);
 }
 .moment-copy h3 {
+  overflow-wrap: anywhere;
   font-size: clamp(2rem, 4vw, 3.5rem);
   line-height: 0.95;
   letter-spacing: -0.04em;
@@ -681,7 +686,8 @@ a {
 }
 /* Footer marquee: a slow horizontal loop, transform only, paused on hover. */
 .footer-marquee {
-  overflow: hidden;
+  max-width: 100%;
+  overflow: clip;
   border-top: 2px solid var(--ink);
   border-bottom: 2px solid var(--ink);
 }
@@ -727,9 +733,6 @@ a {
   }
   .footer-marquee-group[aria-hidden='true'] {
     display: none;
-  }
-  .footer-marquee {
-    overflow-x: auto;
   }
 }
 .count {
@@ -1086,6 +1089,7 @@ a {
   }
   .footer-bottom {
     grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 1rem;
     align-items: center;
     gap: 1.25rem;
   }
@@ -1108,4 +1112,15 @@ a {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* Orange on the dark ink backgrounds needs a lighter tint to meet AA contrast. */
+.collection-picker .accent-number,
+.spec-photo figcaption .accent-number {
+  color: #ff7a4d;
+}
+
+/* Monospace labels may wrap at large text sizes instead of pushing the page sideways. */
+.mono {
+  overflow-wrap: anywhere;
 }

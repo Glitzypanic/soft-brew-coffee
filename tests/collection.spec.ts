@@ -1,70 +1,84 @@
 import { test, expect } from '@playwright/test';
 
-test('all varieties are visible and reveal their own characteristics', async ({ page }) => {
+test('both origins are listed and Colombia opens by default', async ({ page }) => {
   await page.goto('/#origenes');
-  for (const [id, hours] of [['colombia',24],['peru',16]] as const) {
-    const card = page.locator(`details#${id}`);
-    await expect(card.locator('summary')).toBeVisible();
-    await expect(card.locator('.variety-details')).toBeHidden();
-    await card.locator('summary').click();
-    await expect(card.locator('.variety-details')).toContainText(`${hours} horas`);
-    await expect(card.locator('.variety-details')).toContainText('200 ml');
-    await card.locator('summary').click();
-    await expect(card.locator('.variety-details')).toBeHidden();
-  }
-});
-
-test('keyboard toggles characteristics and shared origin links reveal them', async ({ page }) => {
-  await page.goto('/#peru');
-  await expect(page.locator('#peru .variety-details')).toBeVisible();
-  const summary = page.locator('#colombia summary');
-  await summary.focus();
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#colombia .variety-details')).toBeVisible();
-  await page.keyboard.press('Space');
-  await expect(page.locator('#colombia .variety-details')).toBeHidden();
-});
-
-test('expanded cards remain readable with enlarged text on a narrow screen', async ({ page }) => {
-  await page.setViewportSize({ width: 320, height: 900 });
-  await page.goto('/#origenes');
-  await page.addStyleTag({ content: 'html { font-size: 200%; }' });
-  for (const summary of await page.locator('.variety summary').all()) await summary.click();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBeTruthy();
-});
-
-test('name, bottle and details interpolate together and can reverse mid-flight', async ({ page }) => {
-  await page.setViewportSize({ width: 732, height: 900 });
-  await page.goto('/#origenes');
-  const card = page.locator('#colombia');
-  const summary = card.locator('summary');
-  const measure = () => card.evaluate(el => {
-    const title = el.querySelector('h3')!.getBoundingClientRect();
-    const bottle = el.querySelector('.bottle')!.getBoundingClientRect();
-    return { title: title.width, bottle: bottle.left, opacity: Number(getComputedStyle(el.querySelector('.variety-details')!).opacity) };
-  });
-  const start = await measure();
-  await summary.press('Enter');
-  await expect.poll(async () => (await measure()).opacity).toBeGreaterThan(.1);
-  const middle = await measure();
-  expect(middle.opacity).toBeLessThan(1);
-  expect(middle.title).toBeLessThan(start.title);
-  expect(middle.bottle).toBeLessThan(start.bottle);
-  await summary.press('Enter');
-  await summary.press('Enter');
-  await expect(card).toHaveAttribute('data-expanded', 'true');
-  await expect.poll(async () => (await measure()).opacity).toBe(1);
-  const end = await measure();
-  expect(end.title).toBeLessThan(middle.title);
-  await summary.press('Enter');
-  await expect(card).not.toHaveAttribute('open');
-  expect((await measure()).title).toBeCloseTo(start.title, 0);
-});
-
-test('the collection contains only Colombia and Perú', async ({ page }) => {
-  await page.goto('/#origenes');
-  await expect(page.locator('.variety')).toHaveCount(2);
-  await expect(page.locator('#colombia, #peru')).toHaveCount(2);
-  await expect(page.locator('#honduras, #costa-rica, .drop-sticker')).toHaveCount(0);
+  const tabs = page.locator('.origin-tab');
+  await expect(tabs).toHaveCount(2);
   await expect(page.locator('#origins-title')).toHaveText('Dos orígenes.');
+  await expect(page.locator('#tab-colombia')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('#panel-colombia')).toBeVisible();
+  await expect(page.locator('#panel-peru')).toBeHidden();
+  await expect(page.locator('body')).not.toContainText('Honduras');
+  await expect(page.locator('body')).not.toContainText('Costa Rica');
+});
+
+test('clicking another origin switches the panel', async ({ page }) => {
+  await page.goto('/#origenes');
+  await page.locator('#tab-peru').click();
+  await expect(page.locator('#tab-peru')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('#panel-peru')).toBeVisible();
+  await expect(page.locator('#panel-colombia')).toBeHidden();
+  await expect(page.locator('#panel-peru')).toContainText('16 h');
+});
+
+test('clicking the open origin closes it and the next click reopens it', async ({ page }) => {
+  await page.goto('/#origenes');
+  const colombia = page.locator('#tab-colombia');
+  await colombia.click();
+  await expect(colombia).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.locator('#panel-colombia')).toBeHidden();
+  await colombia.click();
+  await expect(colombia).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('#panel-colombia')).toBeVisible();
+});
+
+test('the Compra tab shows the price and a WhatsApp link', async ({ page }) => {
+  await page.goto('/#origenes');
+  const panel = page.locator('#panel-colombia');
+  await panel.getByRole('tab', { name: 'COMPRA' }).click();
+  await expect(page.locator('#compra-colombia')).toBeVisible();
+  await expect(page.locator('#sabor-colombia')).toBeHidden();
+  await expect(page.locator('#compra-colombia')).toContainText('$4.500');
+  await expect(panel.locator('.detail-cta')).toHaveAttribute('href', /^https:\/\/wa\.me\//);
+});
+
+test('keyboard can open a row with Enter', async ({ page }) => {
+  await page.goto('/#origenes');
+  await page.locator('#tab-colombia').focus();
+  await page.locator('#tab-colombia').press('Enter');
+  await expect(page.locator('#tab-colombia')).toHaveAttribute('aria-expanded', 'false');
+  await page.locator('#tab-colombia').press('Enter');
+  await expect(page.locator('#panel-colombia')).toBeVisible();
+});
+
+test('a hash link opens its origin directly', async ({ page }) => {
+  await page.goto('/#peru');
+  await expect(page.locator('#panel-peru')).toBeVisible();
+  await expect(page.locator('#panel-colombia')).toBeHidden();
+});
+
+test('the open panel sits directly below its row without overlap', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/#origenes');
+  await page.locator('#tab-peru').click();
+  // Wait for the panel's entrance animation to finish, then measure both elements together.
+  await expect.poll(() => page.locator('#panel-peru').evaluate((el) => el.getAnimations().filter((a) => a.playState === 'running').length)).toBe(0);
+  const gap = await page.evaluate(() => {
+    const row = document.querySelector('#tab-peru')!.getBoundingClientRect();
+    const panel = document.querySelector('#panel-peru')!.getBoundingClientRect();
+    return panel.top - row.bottom;
+  });
+  expect(Math.abs(gap)).toBeLessThanOrEqual(1);
+});
+
+test('origin rows span the full width at phone and desktop widths', async ({ page }) => {
+  for (const width of [375, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/#origenes');
+    const widths = await page.locator('.origin-tab').evaluateAll((els) =>
+      els.map((el) => Math.round(el.getBoundingClientRect().width)),
+    );
+    const section = await page.locator('#origenes').evaluate((el) => Math.round(el.getBoundingClientRect().width));
+    expect(widths).toEqual([section, section]);
+  }
 });
