@@ -38,7 +38,7 @@ if (!bottle) throw new Error(`Missing bottle asset for ${origin}`);
     widths={[320, 480, 720]}
     sizes={context === 'hero'
       ? '(max-width: 500px) 60vw, (max-width: 700px) 300px, (min-width: 1800px) 558px, 31vw'
-      : '(max-width: 700px) 233px, (max-width: 1050px) 226px, (min-width: 1600px) 306px, 260px'}
+      : '(max-width: 380px) 104px, (max-width: 560px) min(32vw, 140px), (max-width: 900px) 153px, (max-width: 1050px) 226px, (min-width: 1600px) 306px, 220px'}
     format="webp"
     quality={90}
     loading={eager ? 'eager' : 'lazy'}

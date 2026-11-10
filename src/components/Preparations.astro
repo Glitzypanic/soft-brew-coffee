@@ -1,0 +1,168 @@
+---
+import { preparations } from '../data/preparations';
+
+const tags = {
+  colombia: 'IDEAL CON COLOMBIA',
+  peru: 'IDEAL CON PERÚ',
+  ambos: 'CON CUALQUIER ORIGEN',
+} as const;
+---
+<section class="preps" id="preparaciones" aria-labelledby="preps-title">
+  <div class="preps-heading">
+    <p class="mono eyebrow">PREPARACIONES / <span class="accent-number">01—04</span></p>
+    <h2 id="preps-title">Cómo tomarlo.</h2>
+    <p>Un botellín como base. Cuatro formas de servirlo, sin herramientas.</p>
+  </div>
+
+  <div class="preps-grid">
+    {preparations.map((prep, index) => (
+      <article class="prep" style={`--prep-accent:${prep.accent}`}>
+        <header class="prep-head">
+          <span class="prep-num">{String(index + 1).padStart(2, '0')}</span>
+          <span class="mono prep-tag">{tags[prep.pairsWith]}</span>
+        </header>
+        <h3>{prep.name}</h3>
+        <dl class="prep-ingredients mono">
+          {prep.ingredients.map((ingredient) => (
+            <div>
+              <dt>{ingredient.item}</dt>
+              <dd>{ingredient.amount}</dd>
+            </div>
+          ))}
+        </dl>
+        <ol class="prep-steps">
+          {prep.steps.map((step) => <li>{step}</li>)}
+        </ol>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .preps {
+    background: var(--grey);
+    color: var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .preps-heading {
+    padding: 2.5rem var(--gutter);
+    border-bottom: 2px solid var(--ink);
+  }
+  .preps-heading h2 {
+    font-size: clamp(2.5rem, 5vw, 5.5rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    margin: 0.65rem 0;
+  }
+  .preps-heading > p:last-child {
+    font-size: 1.125rem;
+    line-height: 1.5;
+  }
+  .preps-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .prep {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 2.5rem var(--gutter);
+    background: var(--prep-accent);
+    color: var(--ink);
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    min-width: 0;
+  }
+  .prep:nth-child(2n) {
+    border-right: 0;
+  }
+  .prep-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0.75rem;
+  }
+  .prep-num {
+    font-family: var(--sans);
+    font-size: clamp(3.5rem, 6vw, 6rem);
+    font-weight: 600;
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+  }
+  .prep-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-align: right;
+  }
+  .prep h3 {
+    font-size: clamp(1.8rem, 3.2vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+  /* Ingredients take the free height, so steps line up at the bottom of every card. */
+  .prep-ingredients {
+    display: grid;
+    align-content: start;
+    flex: 1;
+    margin: 0;
+    font-size: 0.8rem;
+  }
+  .prep-ingredients > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed var(--ink);
+  }
+  .prep-ingredients > div:last-child {
+    border-bottom: 2px solid var(--ink);
+  }
+  .prep-ingredients dt {
+    letter-spacing: 0.06em;
+  }
+  .prep-ingredients dd {
+    margin: 0;
+    text-align: right;
+  }
+  .prep-steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+    display: grid;
+    gap: 0.6rem;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+  .prep-steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 2.2rem 1fr;
+    gap: 0.5rem;
+  }
+  .prep-steps li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding-top: 0.2rem;
+  }
+  @media (max-width: 900px) {
+    .preps-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .prep {
+      border-right: 0;
+    }
+  }
+  @media (max-width: 700px) {
+    .prep {
+      padding: 2rem 1.25rem;
+    }
+    .preps-heading {
+      padding: 2rem 1.25rem;
+    }
+  }
+</style>
