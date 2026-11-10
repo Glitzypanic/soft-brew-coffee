@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-test('both origins are listed and Colombia opens by default', async ({ page }) => {
+test('both origins are listed and start closed', async ({ page }) => {
   await page.goto('/#origenes');
-  const tabs = page.locator('.origin-tab');
-  await expect(tabs).toHaveCount(2);
+  await expect(page.locator('.origin-tab')).toHaveCount(2);
   await expect(page.locator('#origins-title')).toHaveText('Dos orígenes.');
-  await expect(page.locator('#tab-colombia')).toHaveAttribute('aria-expanded', 'true');
-  await expect(page.locator('#panel-colombia')).toBeVisible();
+  await expect(page.locator('#tab-colombia')).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.locator('#tab-peru')).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.locator('#panel-colombia')).toBeHidden();
   await expect(page.locator('#panel-peru')).toBeHidden();
   await expect(page.locator('body')).not.toContainText('Honduras');
   await expect(page.locator('body')).not.toContainText('Costa Rica');
@@ -14,6 +14,7 @@ test('both origins are listed and Colombia opens by default', async ({ page }) =
 
 test('clicking another origin switches the panel', async ({ page }) => {
   await page.goto('/#origenes');
+  await page.locator('#tab-colombia').click();
   await page.locator('#tab-peru').click();
   await expect(page.locator('#tab-peru')).toHaveAttribute('aria-expanded', 'true');
   await expect(page.locator('#panel-peru')).toBeVisible();
@@ -25,6 +26,8 @@ test('clicking the open origin closes it and the next click reopens it', async (
   await page.goto('/#origenes');
   const colombia = page.locator('#tab-colombia');
   await colombia.click();
+  await expect(colombia).toHaveAttribute('aria-expanded', 'true');
+  await colombia.click();
   await expect(colombia).toHaveAttribute('aria-expanded', 'false');
   await expect(page.locator('#panel-colombia')).toBeHidden();
   await colombia.click();
@@ -34,6 +37,7 @@ test('clicking the open origin closes it and the next click reopens it', async (
 
 test('the Compra tab shows the price and a WhatsApp link', async ({ page }) => {
   await page.goto('/#origenes');
+  await page.locator('#tab-colombia').click();
   const panel = page.locator('#panel-colombia');
   await panel.getByRole('tab', { name: 'COMPRA' }).click();
   await expect(page.locator('#compra-colombia')).toBeVisible();
@@ -46,9 +50,9 @@ test('keyboard can open a row with Enter', async ({ page }) => {
   await page.goto('/#origenes');
   await page.locator('#tab-colombia').focus();
   await page.locator('#tab-colombia').press('Enter');
-  await expect(page.locator('#tab-colombia')).toHaveAttribute('aria-expanded', 'false');
-  await page.locator('#tab-colombia').press('Enter');
   await expect(page.locator('#panel-colombia')).toBeVisible();
+  await page.locator('#tab-colombia').press('Enter');
+  await expect(page.locator('#panel-colombia')).toBeHidden();
 });
 
 test('a hash link opens its origin directly', async ({ page }) => {

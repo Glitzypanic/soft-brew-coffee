@@ -180,31 +180,23 @@ a {
   letter-spacing: -0.06em;
   font-weight: 600;
 }
-/* Each line is masked and slides up in one hard cut, no fade. */
-.spec-title .line {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
+/* Title: each word fades up in a short stagger. */
+.spec-title .word {
+  display: inline-block;
 }
-.spec-title .line-2 {
-  font-weight: 400;
+.js-reveal .spec-title .word {
+  opacity: 0;
+  transform: translateY(0.2em);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.1, 1);
+  transition-delay: calc(var(--i) * 90ms);
 }
-.spec-title .line-inner {
-  display: block;
-}
-.js-reveal .spec-title .line-inner {
-  transform: translateY(105%);
-  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.1, 1);
-}
-.js-reveal .spec-title .line-2 .line-inner {
-  transition-delay: 0.12s;
-}
-.js-reveal.is-ready .spec-title .line-inner {
+.js-reveal.is-ready .spec-title .word {
+  opacity: 1;
   transform: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .js-reveal .spec-title .line-inner {
+  .js-reveal .spec-title .word {
+    opacity: 1;
     transform: none;
     transition: none;
   }
