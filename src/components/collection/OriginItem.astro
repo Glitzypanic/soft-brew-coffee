@@ -1,0 +1,148 @@
+---
+import OriginDetail from './OriginDetail.astro';
+import type { Origin } from '../../data/origins';
+import { formatCLP } from '../../lib/format';
+
+interface Props {
+  origin: Origin;
+}
+
+const { origin } = Astro.props;
+---
+
+<div class="origin-item">
+  <button
+    type="button"
+    class="origin-tab"
+    id={`tab-${origin.id}`}
+    aria-controls={`panel-${origin.id}`}
+    aria-expanded="false"
+    data-origin={origin.id}
+  >
+    <span class="origin-tab-num">{origin.number}</span>
+    <span class="origin-tab-name">{origin.name}</span>
+    <span class="origin-tab-meta mono">
+      <span class="origin-tab-price">{formatCLP(origin.priceCLP)}</span>
+      <span class="origin-tab-icon" aria-hidden="true"></span>
+    </span>
+  </button>
+  <div class="origin-collapse">
+    <article
+      class="origin-detail"
+      id={`panel-${origin.id}`}
+      data-origin={origin.id}
+      inert
+      style={`--origin-color:${origin.color};--origin-ink:${origin.ink}`}
+    >
+      <OriginDetail origin={origin} />
+    </article>
+  </div>
+</div>
+
+<style>
+  /* Editorial index: one full-width row per origin, its panel opens right below. */
+  .origin-item {
+    border-top: 2px solid var(--grey);
+  }
+  /* Closed panels take no height. The script animates the height when a panel opens or closes. */
+  .origin-collapse {
+    overflow: hidden;
+    height: 0;
+  }
+  .origin-collapse[data-open='true'] {
+    height: auto;
+  }
+  .origin-tab {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-4);
+    width: 100%;
+    padding: var(--space-6) var(--gutter) var(--space-6)
+      calc(var(--gutter) + 1.25rem);
+    background: transparent;
+    color: var(--grey);
+    border: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .origin-tab:hover {
+    background: var(--surface-hover);
+  }
+  .origin-tab[aria-expanded='true'] {
+    background: var(--grey);
+    color: var(--ink);
+  }
+  .origin-tab:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: -6px;
+  }
+  .origin-tab-num {
+    font-family: var(--sans);
+    font-size: clamp(1.25rem, 2.4vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+  .origin-tab-name {
+    font-size: clamp(2.5rem, 6vw, 6rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    line-height: 0.95;
+    overflow-wrap: anywhere;
+  }
+  .origin-tab-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    font-size: var(--text-sm);
+    letter-spacing: 0.06em;
+  }
+  .origin-tab-price {
+    opacity: 0.75;
+  }
+  .origin-tab[aria-expanded='true'] .origin-tab-price {
+    opacity: 1;
+  }
+  .origin-tab-icon::before {
+    content: '+';
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+  .origin-tab[aria-expanded='true'] .origin-tab-icon::before {
+    content: '−';
+  }
+
+  /* Detail panel: colored block, bottle on the left, facts on the right. */
+  .origin-detail {
+    --rule-origin: 2px solid var(--origin-ink);
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    background: var(--origin-color);
+    color: var(--origin-ink);
+    visibility: hidden;
+  }
+
+  @media (max-width: 700px) {
+    .origin-detail {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .origin-tab {
+      grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+      gap: 0.6rem;
+      padding: var(--space-5) var(--space-4) var(--space-5) 1.1rem;
+    }
+    .origin-tab-num {
+      font-size: 1.1rem;
+    }
+    .origin-tab-name {
+      font-size: clamp(1.75rem, 9vw, 2.6rem);
+      min-width: 0;
+    }
+    .origin-tab-meta {
+      gap: 0.6rem;
+      font-size: var(--text-2xs);
+    }
+  }
+</style>

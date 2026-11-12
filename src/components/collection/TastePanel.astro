@@ -1,0 +1,113 @@
+---
+import Facts from './Facts.astro';
+import type { Origin } from '../../data/origins';
+
+interface Props {
+  origin: Origin;
+}
+
+const { origin } = Astro.props;
+const scale = [1, 2, 3, 4, 5];
+const profileRows = [
+  { key: 'acidez', label: 'ACIDEZ' },
+  { key: 'cuerpo', label: 'CUERPO' },
+  { key: 'dulzor', label: 'DULZOR' },
+] as const;
+---
+
+<div
+  class="detail-sabor"
+  id={`sabor-${origin.id}`}
+  role="tabpanel"
+  aria-labelledby={`tab-sabor-${origin.id}`}
+>
+  <p class="mono detail-label">NOTAS</p>
+  <ul class="detail-notes">
+    {origin.notes.map((note) => <li>{note}</li>)}
+  </ul>
+
+  <div class="detail-profile">
+    {
+      profileRows.map((row) => (
+        <div class="meter">
+          <span class="mono meter-label">{row.label}</span>
+          <span
+            class="meter-track"
+            role="img"
+            aria-label={`${row.label.toLowerCase()} ${origin.profile[row.key]} de 5`}
+          >
+            {scale.map((step) => (
+              <i class:list={[step <= origin.profile[row.key] && 'on']} />
+            ))}
+          </span>
+        </div>
+      ))
+    }
+  </div>
+
+  <Facts
+    items={[
+      { term: 'INFUSIÓN', value: `${origin.infusionHours} h` },
+      { term: 'FORMATO', value: '200 ml' },
+      { term: 'VARIETAL', value: 'Arábica' },
+    ]}
+  />
+</div>
+
+<style>
+  .detail-sabor {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .detail-sabor[hidden] {
+    display: none;
+  }
+  .detail-label {
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+  }
+  .detail-notes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-1);
+    font-family: var(--sans);
+    font-size: clamp(1.4rem, 2.6vw, 2.4rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+  .detail-profile {
+    display: grid;
+    gap: 0.6rem;
+    margin-bottom: var(--space-2);
+  }
+  .meter {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .meter-label {
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+  }
+  .meter-track {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-self: start;
+    gap: 4px;
+    min-width: 0;
+  }
+  .meter-track i {
+    display: block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid currentColor;
+  }
+  .meter-track i.on {
+    background: currentColor;
+  }
+</style>

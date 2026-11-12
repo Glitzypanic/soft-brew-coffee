@@ -6,9 +6,7 @@ export interface Origin {
   infusionHours: number;
   color: string;
   ink: string;
-  cap: 'silver' | 'gold';
   comingSoon?: boolean;
-  notesStatus: 'label' | 'confirmed';
   priceCLP: number;
   // Taste profile on a 1–5 scale. Placeholder values (ficticio) until the real profile is confirmed.
   profile: { acidez: number; cuerpo: number; dulzor: number };
@@ -22,10 +20,6 @@ export function whatsappOrderUrl(origin: Origin): string {
   return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
 }
 
-export function formatCLP(amount: number): string {
-  return `$${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
-}
-
 export const origins: Origin[] = [
   {
     id: 'colombia',
@@ -35,8 +29,6 @@ export const origins: Origin[] = [
     notes: ['Chocolate dulce', 'Caramelo'],
     color: '#D2D2D2',
     ink: '#111111',
-    cap: 'silver',
-    notesStatus: 'label',
     priceCLP: 4500,
     profile: { acidez: 2, cuerpo: 3, dulzor: 4 },
   },
@@ -48,12 +40,7 @@ export const origins: Origin[] = [
     notes: ['Avellana tostada', 'Chocolate'],
     color: '#D9D218',
     ink: '#111111',
-    cap: 'gold',
-    notesStatus: 'label',
     priceCLP: 4500,
     profile: { acidez: 3, cuerpo: 4, dulzor: 2 },
   },
 ];
-
-// Owner approved publication without an Instagram URL. Keep it as plain text.
-export const instagramUrl: string | null = null;

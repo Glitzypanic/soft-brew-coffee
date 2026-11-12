@@ -1,40 +1,53 @@
 ---
 import { preparations } from '../data/preparations';
 
+interface Props {
+  headingTag?: 'h1' | 'h2';
+}
+const { headingTag: Heading = 'h2' } = Astro.props;
+const CardHeading = Heading === 'h1' ? 'h2' : 'h3';
+
 const tags = {
   colombia: 'IDEAL CON COLOMBIA',
   peru: 'IDEAL CON PERÚ',
   ambos: 'CON CUALQUIER ORIGEN',
 } as const;
 ---
+
 <section class="preps" id="preparaciones" aria-labelledby="preps-title">
   <div class="preps-heading">
-    <p class="mono eyebrow">PREPARACIONES / <span class="accent-number">01—04</span></p>
-    <h2 id="preps-title">Cómo tomarlo.</h2>
+    <p class="mono eyebrow">
+      PREPARACIONES / <span class="accent-number">01—04</span>
+    </p>
+    <Heading id="preps-title">Cómo tomarlo.</Heading>
     <p>Un botellín como base. Cuatro formas de servirlo, sin herramientas.</p>
   </div>
 
   <div class="preps-grid">
-    {preparations.map((prep, index) => (
-      <article class="prep" style={`--prep-accent:${prep.accent}`}>
-        <header class="prep-head">
-          <span class="prep-num">{String(index + 1).padStart(2, '0')}</span>
-          <span class="mono prep-tag">{tags[prep.pairsWith]}</span>
-        </header>
-        <h3>{prep.name}</h3>
-        <dl class="prep-ingredients mono">
-          {prep.ingredients.map((ingredient) => (
-            <div>
-              <dt>{ingredient.item}</dt>
-              <dd>{ingredient.amount}</dd>
-            </div>
-          ))}
-        </dl>
-        <ol class="prep-steps">
-          {prep.steps.map((step) => <li>{step}</li>)}
-        </ol>
-      </article>
-    ))}
+    {
+      preparations.map((prep, index) => (
+        <article class="prep" style={`--prep-accent:${prep.accent}`}>
+          <header class="prep-head">
+            <span class="prep-num">{String(index + 1).padStart(2, '0')}</span>
+            <span class="mono prep-tag">{tags[prep.pairsWith]}</span>
+          </header>
+          <CardHeading class="prep-name">{prep.name}</CardHeading>
+          <dl class="prep-ingredients mono">
+            {prep.ingredients.map((ingredient) => (
+              <div>
+                <dt>{ingredient.item}</dt>
+                <dd>{ingredient.amount}</dd>
+              </div>
+            ))}
+          </dl>
+          <ol class="prep-steps">
+            {prep.steps.map((step) => (
+              <li>{step}</li>
+            ))}
+          </ol>
+        </article>
+      ))
+    }
   </div>
 </section>
 
@@ -42,11 +55,11 @@ const tags = {
   .preps {
     background: var(--grey);
     color: var(--ink);
-    border-bottom: 2px solid var(--ink);
+    border-bottom: var(--rule);
   }
   .preps-heading {
-    padding: 2.5rem var(--gutter);
-    border-bottom: 2px solid var(--ink);
+    padding: var(--space-8) var(--gutter);
+    border-bottom: var(--rule);
   }
   .preps-heading h2 {
     overflow-wrap: anywhere;
@@ -56,7 +69,7 @@ const tags = {
     margin: 0.65rem 0;
   }
   .preps-heading > p:last-child {
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
     line-height: 1.5;
   }
   .preps-grid {
@@ -66,12 +79,12 @@ const tags = {
   .prep {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    padding: 2.5rem var(--gutter);
+    gap: var(--space-6);
+    padding: var(--space-8) var(--gutter);
     background: var(--prep-accent);
     color: var(--ink);
-    border-right: 2px solid var(--ink);
-    border-bottom: 2px solid var(--ink);
+    border-right: var(--rule);
+    border-bottom: var(--rule);
     min-width: 0;
   }
   .prep:nth-child(2n) {
@@ -82,9 +95,9 @@ const tags = {
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 1rem;
-    border-bottom: 2px solid var(--ink);
-    padding-bottom: 0.75rem;
+    gap: var(--space-4);
+    border-bottom: var(--rule);
+    padding-bottom: var(--space-3);
   }
   .prep-num {
     font-family: var(--sans);
@@ -94,11 +107,11 @@ const tags = {
     letter-spacing: -0.06em;
   }
   .prep-tag {
-    font-size: 0.7rem;
+    font-size: var(--text-xs);
     letter-spacing: 0.08em;
     text-align: right;
   }
-  .prep h3 {
+  .prep-name {
     overflow-wrap: anywhere;
     font-size: clamp(1.8rem, 3.2vw, 3rem);
     font-weight: 600;
@@ -116,12 +129,12 @@ const tags = {
   .prep-ingredients > div {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-4);
     padding: 0.6rem 0;
     border-bottom: 1px dashed var(--ink);
   }
   .prep-ingredients > div:last-child {
-    border-bottom: 2px solid var(--ink);
+    border-bottom: var(--rule);
   }
   .prep-ingredients dt {
     letter-spacing: 0.06em;
@@ -137,7 +150,7 @@ const tags = {
     counter-reset: step;
     display: grid;
     gap: 0.6rem;
-    font-size: 1rem;
+    font-size: var(--text-base);
     line-height: 1.4;
   }
   .prep-steps li {
@@ -145,12 +158,12 @@ const tags = {
     display: grid;
     grid-template-columns: 2.2rem minmax(0, 1fr);
     overflow-wrap: anywhere;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
   .prep-steps li::before {
     content: counter(step, decimal-leading-zero);
     font-family: var(--mono);
-    font-size: 0.75rem;
+    font-size: var(--text-sm);
     padding-top: 0.2rem;
   }
   @media (max-width: 900px) {
@@ -163,10 +176,10 @@ const tags = {
   }
   @media (max-width: 700px) {
     .prep {
-      padding: 2rem 1.25rem;
+      padding: var(--space-7) var(--space-5);
     }
     .preps-heading {
-      padding: 2rem 1.25rem;
+      padding: var(--space-7) var(--space-5);
     }
   }
 </style>
