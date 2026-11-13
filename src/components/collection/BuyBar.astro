@@ -48,7 +48,7 @@ const { origin } = Astro.props;
       transform: translateY(0);
     }
     .buy-bar-name {
-      font-size: var(--text-xs);
+      font-size: var(--text-sm);
       letter-spacing: 0.08em;
     }
     .buy-bar-price {
@@ -60,6 +60,7 @@ const { origin } = Astro.props;
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
+      min-height: 2.75rem;
       padding: 0.7rem 0.9rem;
       background: var(--accent);
       color: var(--ink);

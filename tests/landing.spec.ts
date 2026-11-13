@@ -157,6 +157,56 @@ test('reduced motion keeps the content readable and enlarged text does not overf
   }
 });
 
+test('phone text is at least 12px, key targets are 44px tall, and the marquee has no label', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/#colombia');
+  await expect(page.locator('#tab-colombia')).toHaveAttribute(
+    'aria-expanded',
+    'true',
+  );
+  await expect(
+    page.locator('#panel-colombia .detail-tab').first(),
+  ).toBeVisible();
+
+  const smallText = await page.evaluate(() => {
+    const found: string[] = [];
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+    );
+    const seen = new Set<Element>();
+    let node: Node | null;
+    while ((node = walker.nextNode())) {
+      const el = node.parentElement;
+      if (!el || !node.textContent?.trim() || seen.has(el)) continue;
+      seen.add(el);
+      if (!el.getClientRects().length || el.closest('[inert]')) continue;
+      if (getComputedStyle(el).visibility === 'hidden') continue;
+      const size = parseFloat(getComputedStyle(el).fontSize);
+      if (size < 12) found.push(`${size}px ${node.textContent.trim()}`);
+    }
+    return found;
+  });
+  expect(smallText, 'text below 12px').toEqual([]);
+
+  const targets = [
+    page.locator('.contact-link').first(),
+    page.locator('.bento-heading-link').first(),
+    page.locator('.buy-bar-cta').first(),
+    ...(await page.locator('#panel-colombia .detail-tab').all()),
+  ];
+  for (const target of targets) {
+    const box = await target.boundingBox();
+    expect(box?.height ?? 0, 'target height').toBeGreaterThanOrEqual(44);
+  }
+
+  expect(
+    await page.locator('.footer-marquee').getAttribute('aria-label'),
+  ).toBeNull();
+});
+
 test('the preparations page has one h1 and passes automated checks', async ({
   page,
 }) => {

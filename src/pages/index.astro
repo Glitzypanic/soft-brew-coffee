@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import Arrow from '../components/Arrow.astro';
 import Collection from '../components/Collection.astro';
 import KeepCold from '../components/KeepCold.astro';
@@ -43,14 +43,15 @@ const titleLines = titleWords.map((line) =>
     </h1>
     <KeepCold class="hero-snow" />
     <figure class="spec-photo">
-      <Image
+      <Picture
         src={heroFlatlay}
         alt="Dos botellines de cold brew, Perú y Colombia, sobre una mesa de madera con granos de café"
         width={1372}
         widths={[480, 800, 1200, 1372]}
-        sizes="(max-width: 700px) 100vw, 58vw"
-        format="webp"
-        quality={88}
+        sizes="(max-width: 700px) 67vw, 58vw"
+        formats={['avif', 'webp']}
+        fallbackFormat="webp"
+        quality={60}
         loading="eager"
         fetchpriority="high"
       />
@@ -112,14 +113,15 @@ const titleLines = titleWords.map((line) =>
     <div class="bento">
       <figure class="bento-tile bento-photo bento-peru-photo" style="--d:0ms">
         <div class="bento-photo-frame">
-          <Image
+          <Picture
             src={pause}
             width={1200}
             alt="Botellín de Perú junto a un vaso con hielo y una rodaja de cítrico, sobre una mesa de madera"
             widths={[480, 800, 1200]}
-            sizes="(max-width: 700px) 100vw, 58vw"
-            format="webp"
-            quality={85}
+            sizes="(max-width: 700px) 67vw, 58vw"
+            formats={['avif', 'webp']}
+            fallbackFormat="webp"
+            quality={60}
             loading="lazy"
           />
         </div>
@@ -147,14 +149,15 @@ const titleLines = titleWords.map((line) =>
         style="--d:120ms"
       >
         <div class="bento-photo-frame">
-          <Image
+          <Picture
             src={coast}
             width={1000}
             alt="Botellín de Colombia en una mano frente al mar"
             widths={[480, 800, 1000]}
-            sizes="(max-width: 700px) 100vw, 58vw"
-            format="webp"
-            quality={85}
+            sizes="(max-width: 700px) 67vw, 58vw"
+            formats={['avif', 'webp']}
+            fallbackFormat="webp"
+            quality={60}
             loading="lazy"
           />
         </div>
