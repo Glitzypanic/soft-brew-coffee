@@ -58,8 +58,7 @@ const { origin } = Astro.props;
     align-items: center;
     gap: var(--space-4);
     width: 100%;
-    padding: var(--space-6) var(--gutter) var(--space-6)
-      calc(var(--gutter) + 1.25rem);
+    padding: var(--space-6) var(--gutter);
     background: transparent;
     color: var(--grey);
     border: 0;
@@ -80,7 +79,7 @@ const { origin } = Astro.props;
   }
   .origin-tab-num {
     font-family: var(--sans);
-    font-size: clamp(1.25rem, 2.4vw, 2rem);
+    font-size: clamp(1.5rem, 2.9vw, 2.5rem);
     font-weight: 600;
     letter-spacing: -0.04em;
   }
@@ -99,10 +98,14 @@ const { origin } = Astro.props;
     letter-spacing: 0.06em;
   }
   .origin-tab-price {
-    opacity: 0.75;
+    font-family: var(--mono);
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--accent-on-dark);
   }
   .origin-tab[aria-expanded='true'] .origin-tab-price {
-    opacity: 1;
+    color: var(--accent-ink);
   }
   .origin-tab-icon::before {
     content: '+';
@@ -131,10 +134,10 @@ const { origin } = Astro.props;
     .origin-tab {
       grid-template-columns: 2.75rem minmax(0, 1fr) auto;
       gap: 0.6rem;
-      padding: var(--space-5) var(--space-4) var(--space-5) 1.1rem;
+      padding: var(--space-5) var(--gutter);
     }
     .origin-tab-num {
-      font-size: 1.1rem;
+      font-size: 1.4rem;
     }
     .origin-tab-name {
       font-size: clamp(1.75rem, 9vw, 2.6rem);

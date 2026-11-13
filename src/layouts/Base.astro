@@ -68,11 +68,8 @@ const socialImage = new URL('/social-cover.png', Astro.site);
           >CAFÉ DE ESPECIALIDAD / COLD BREW</span
         >
         <nav class="main-nav mono" aria-label="Navegación principal">
-          <a href="/#origenes">LOS ORÍGENES <span aria-hidden="true">↓</span></a
-          >
-          <a href="/preparaciones/"
-            >PREPARACIONES <span aria-hidden="true">→</span></a
-          >
+          <a href="/#origenes">LOS ORÍGENES <Arrow direction="down" /></a>
+          <a href="/preparaciones/">PREPARACIONES <Arrow direction="right" /></a>
         </nav>
         <a class="masthead-cta mono" href="/#origenes">PEDIR <Arrow /></a>
       </header>
@@ -93,8 +90,10 @@ const socialImage = new URL('/social-cover.png', Astro.site);
         <div class="footer-feature">
           <div class="footer-statement">
             <p class="mono">UNA PAUSA DIFERENTE.</p>
-            <h2>EL CAFÉ<br />SE TOMA<br />SU TIEMPO.</h2>
-            <p class="footer-note">Cold brew para disfrutar el&nbsp;momento.</p>
+            <div class="footer-headline">
+              <h2>EL CAFÉ<br />SE TOMA<br />SU TIEMPO.</h2>
+              <p class="footer-note">Cold brew para disfrutar el&nbsp;momento.</p>
+            </div>
             <a class="footer-link mono" href="/preparaciones/">
               <span>VER PREPARACIONES</span>
               <Arrow />
