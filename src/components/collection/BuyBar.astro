@@ -1,0 +1,80 @@
+---
+import Arrow from '../Arrow.astro';
+import { whatsappOrderUrl, type Origin } from '../../data/origins';
+import { formatCLP } from '../../lib/format';
+
+// Mobile purchase bar. It starts on the first origin and follows the open one via the script.
+interface Props {
+  origin: Origin;
+}
+
+const { origin } = Astro.props;
+---
+
+<div class="buy-bar" aria-hidden="true">
+  <span class="mono buy-bar-name">{origin.name}</span>
+  <strong class="buy-bar-price">{formatCLP(origin.priceCLP)}</strong>
+  <a
+    class="buy-bar-cta mono"
+    href={whatsappOrderUrl(origin)}
+    target="_blank"
+    rel="noopener noreferrer"
+    tabindex="-1">PEDIR <Arrow /></a
+  >
+</div>
+
+<style>
+  .buy-bar {
+    display: none;
+  }
+  @media (max-width: 700px) {
+    .buy-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: var(--z-buybar);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      background: var(--ink);
+      color: var(--grey);
+      border-top: 2px solid var(--grey);
+      transform: translateY(110%);
+      transition: transform 0.3s ease;
+    }
+    .buy-bar.is-visible {
+      transform: translateY(0);
+    }
+    .buy-bar-name {
+      font-size: var(--text-sm);
+      letter-spacing: 0.08em;
+    }
+    .buy-bar-price {
+      margin-left: auto;
+      font-size: var(--text-xl);
+      font-weight: 600;
+    }
+    .buy-bar-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-height: 2.75rem;
+      padding: 0.7rem 0.9rem;
+      background: var(--accent);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: var(--text-sm);
+    }
+    .buy-bar-cta :global(svg) {
+      width: 1em;
+      height: 1em;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .buy-bar {
+      transition: none;
+    }
+  }
+</style>

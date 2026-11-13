@@ -1,48 +1,36 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import colombiaBottle from '../assets/relit-colombia-grey.png';
+import peruBottle from '../assets/relit-peru-yellow.png';
+
 interface Props {
   origin: string;
   name: string;
-  eager?: boolean;
-  context?: 'collection' | 'hero';
-  class?: string;
 }
-const {
-  origin,
-  name,
-  eager = false,
-  context = 'collection',
-  class: className,
-} = Astro.props;
-const lighting: Record<string, string> = {
-  colombia: context === 'hero' ? 'colombia-yellow' : 'colombia-grey',
-  peru: 'peru-yellow',
-  honduras: 'honduras-vibrant-pink',
-  'costa-rica': 'costa-rica-royal-blue',
+
+const { origin, name } = Astro.props;
+const bottles: Record<string, ImageMetadata> = {
+  colombia: colombiaBottle,
+  peru: peruBottle,
 };
-const assets = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/relit-*.png',
-  { eager: true },
-);
-const bottle = assets[`../assets/relit-${lighting[origin]}.png`]?.default;
+const bottle = bottles[origin];
 if (!bottle) throw new Error(`Missing bottle asset for ${origin}`);
+// The bottle is drawn at min(100%, 300px) on desktop and min(60%, 240px) on phones.
 ---
 
-<span class:list={['bottle', className]}>
-  <Image
+<span class="bottle">
+  <Picture
     src={bottle}
     width={720}
     alt={`Soft Brew Coffee de ${name}, botellín de 200 ml`}
     style="clip-path:url(#bottle-mask)"
     widths={[320, 480, 720]}
-    sizes={context === 'hero'
-      ? '(max-width: 500px) 60vw, (max-width: 700px) 300px, (min-width: 1800px) 558px, 31vw'
-      : '(max-width: 380px) 104px, (max-width: 560px) min(32vw, 140px), (max-width: 900px) 153px, (max-width: 1050px) 226px, (min-width: 1600px) 306px, 220px'}
-    format="webp"
-    quality={90}
-    loading={eager ? 'eager' : 'lazy'}
+    sizes="(max-width: 700px) min(60vw, 240px), 300px"
+    formats={['avif', 'webp']}
+    fallbackFormat="webp"
+    quality={70}
+    loading="lazy"
     decoding="async"
   />
-  <slot />
 </span>

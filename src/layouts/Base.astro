@@ -1,0 +1,146 @@
+---
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+import '@fontsource/doto/latin-700.css';
+import Arrow from '../components/Arrow.astro';
+import BottleMasks from '../components/BottleMasks.astro';
+import { whatsappNumber } from '../data/origins';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+}
+
+const {
+  title = 'Soft Brew Coffee — El lado frío del café',
+  description = 'Soft Brew Coffee. Cold brew de especialidad en botellines de 200 ml. Descubre Colombia y Perú.',
+  path = '/',
+} = Astro.props;
+const canonical = new URL(path, Astro.site);
+const socialImage = new URL('/social-cover.png', Astro.site);
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:site_name" content="Soft Brew Coffee" />
+    <meta property="og:title" content={title} />
+    <meta
+      property="og:description"
+      content="Dos orígenes. Café de especialidad en frío, en botellines de 200 ml."
+    />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta
+      property="og:image:alt"
+      content="Soft Brew Coffee: café de especialidad, una nueva perspectiva."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#E9E6DB" />
+    <link rel="icon" type="image/svg+xml" href="/brand/keep-cold.svg" />
+    <title>{title}</title>
+    <script is:inline>
+      document.documentElement.classList.add('js-reveal');
+    </script>
+  </head>
+  <body>
+    <BottleMasks />
+    <a class="skip-link mono" href="#contenido">Saltar al contenido</a>
+    <div class="site-frame" id="inicio">
+      <header class="masthead">
+        <a
+          class="masthead-brand"
+          href="/"
+          aria-label="Soft Brew Coffee, inicio"
+        >
+          <img src="/brand/brew-symbol.svg" alt="" width="158" height="198" />
+        </a>
+        <span class="masthead-caption mono"
+          >CAFÉ DE ESPECIALIDAD / COLD BREW</span
+        >
+        <nav class="main-nav mono" aria-label="Navegación principal">
+          <a href="/#origenes">LOS ORÍGENES <span aria-hidden="true">↓</span></a
+          >
+          <a href="/preparaciones/"
+            >PREPARACIONES <span aria-hidden="true">→</span></a
+          >
+        </nav>
+        <a class="masthead-cta mono" href="/#origenes">PEDIR <Arrow /></a>
+      </header>
+
+      <main id="contenido">
+        <slot />
+      </main>
+
+      <footer class="footer" id="contacto">
+        <div class="footer-header mono">
+          <span>CAFÉ DE ESPECIALIDAD / EN FRÍO</span>
+          <span
+            ><span class="accent-number">02</span> ORÍGENES · <span
+              class="accent-number">200</span
+            > ML</span
+          >
+        </div>
+        <div class="footer-feature">
+          <div class="footer-statement">
+            <p class="mono">UNA PAUSA DIFERENTE.</p>
+            <h2>EL CAFÉ<br />SE TOMA<br />SU TIEMPO.</h2>
+            <p class="footer-note">Cold brew para disfrutar el&nbsp;momento.</p>
+            <a class="footer-link mono" href="/preparaciones/">
+              <span>VER PREPARACIONES</span>
+              <Arrow />
+            </a>
+          </div>
+        </div>
+        <div class="footer-marquee">
+          <div class="footer-marquee-track">
+            <p class="footer-marquee-group">
+              <span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span><span
+                >BUEN CAFÉ EN FRÍO</span
+              ><span>BUEN CAFÉ EN FRÍO</span>
+            </p>
+            <p class="footer-marquee-group" aria-hidden="true">
+              <span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span><span
+                >BUEN CAFÉ EN FRÍO</span
+              ><span>BUEN CAFÉ EN FRÍO</span>
+            </p>
+          </div>
+        </div>
+        <div class="footer-bottom mono">
+          <div class="footer-brand">
+            <img
+              src="/brand/soft-brew-coffee.svg"
+              alt="Soft Brew Coffee: logotipo original con tetera y V60"
+              width="601"
+              height="429"
+              loading="lazy"
+            />
+          </div>
+          <div class="footer-social">
+            <span>CONTACTO</span>
+            <a
+              class="contact-link mono"
+              href={`https://wa.me/${whatsappNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WHATSAPP <Arrow />
+            </a>
+          </div>
+          <a class="footer-return" href="/#inicio"
+            >VOLVER ARRIBA <span aria-hidden="true">↑</span></a
+          >
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

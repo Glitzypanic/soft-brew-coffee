@@ -1,0 +1,139 @@
+---
+import Bottle from '../Bottle.astro';
+import BuyPanel from './BuyPanel.astro';
+import TastePanel from './TastePanel.astro';
+import type { Origin } from '../../data/origins';
+
+interface Props {
+  origin: Origin;
+}
+
+const { origin } = Astro.props;
+---
+
+<figure class="detail-bottle">
+  <Bottle origin={origin.id} name={origin.name} />
+</figure>
+
+<div class="detail-body">
+  <p class="mono detail-kicker">{origin.name} / {origin.number}</p>
+  <h3>{origin.name}.</h3>
+
+  <div
+    class="detail-tabs"
+    role="tablist"
+    aria-label={`Detalle de ${origin.name}`}
+  >
+    <button
+      type="button"
+      role="tab"
+      class="detail-tab"
+      aria-selected="true"
+      tabindex="0"
+      aria-controls={`sabor-${origin.id}`}
+      id={`tab-sabor-${origin.id}`}
+      data-target="sabor"
+    >
+      SABOR
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="detail-tab"
+      aria-selected="false"
+      tabindex="-1"
+      aria-controls={`compra-${origin.id}`}
+      id={`tab-compra-${origin.id}`}
+      data-target="compra"
+    >
+      COMPRA
+    </button>
+  </div>
+
+  <TastePanel origin={origin} />
+  <BuyPanel origin={origin} />
+</div>
+
+<style>
+  .detail-bottle {
+    margin: 0;
+    display: grid;
+    place-items: center;
+    padding: var(--space-8) var(--gutter);
+    border-right: var(--rule-origin);
+  }
+  .detail-bottle :global(.bottle) {
+    display: block;
+    width: min(100%, 300px);
+    aspect-ratio: 2 / 3;
+    height: auto;
+  }
+  .detail-bottle :global(.bottle picture) {
+    display: block;
+    height: 100%;
+  }
+  .detail-bottle :global(.bottle img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .detail-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--space-8) var(--gutter);
+    min-width: 0;
+  }
+  .detail-kicker {
+    font-size: var(--text-sm);
+    letter-spacing: 0.08em;
+  }
+  .detail-body h3 {
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 600;
+    letter-spacing: -0.055em;
+    line-height: 0.95;
+  }
+  .detail-tabs {
+    display: flex;
+    border: var(--rule-origin);
+    width: fit-content;
+  }
+  .detail-tab {
+    min-height: 2.75rem;
+    padding: 0.6rem 1.1rem;
+    background: transparent;
+    color: inherit;
+    border: 0;
+    font: inherit;
+    font-family: var(--mono);
+    font-size: var(--text-sm);
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+  .detail-tab + .detail-tab {
+    border-left: var(--rule-origin);
+  }
+  .detail-tab[aria-selected='true'] {
+    background: var(--origin-ink);
+    color: var(--origin-color);
+  }
+  .detail-tab:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 700px) {
+    .detail-bottle {
+      border-right: 0;
+      border-bottom: var(--rule-origin);
+      padding: var(--space-7) var(--gutter);
+    }
+    .detail-bottle :global(.bottle) {
+      width: min(60%, 240px);
+    }
+    .detail-body {
+      padding: var(--space-7) var(--space-5);
+    }
+  }
+</style>

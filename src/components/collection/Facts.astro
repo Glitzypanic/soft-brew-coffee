@@ -1,0 +1,38 @@
+---
+// Label and value pairs in the small mono grid used by both panels.
+interface Props {
+  items: { term: string; value: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<dl class="detail-facts mono">
+  {
+    items.map(({ term, value }) => (
+      <div>
+        <dt>{term}</dt>
+        <dd>{value}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .detail-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-7);
+    margin: 0;
+    padding-top: var(--space-4);
+    border-top: 2px solid currentColor;
+  }
+  .detail-facts dt {
+    font-size: var(--text-sm);
+    letter-spacing: 0.08em;
+  }
+  .detail-facts dd {
+    margin: 0.3rem 0 0;
+    font-size: var(--text-base);
+  }
+</style>

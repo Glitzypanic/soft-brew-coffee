@@ -1,0 +1,107 @@
+---
+import Arrow from '../Arrow.astro';
+import Facts from './Facts.astro';
+import { whatsappOrderUrl, type Origin } from '../../data/origins';
+import { formatBottlingDate, formatCLP } from '../../lib/format';
+
+interface Props {
+  origin: Origin;
+}
+
+const { origin } = Astro.props;
+const bottledOn = formatBottlingDate(new Date());
+---
+
+<div
+  class="detail-compra"
+  id={`compra-${origin.id}`}
+  role="tabpanel"
+  aria-labelledby={`tab-compra-${origin.id}`}
+  hidden
+>
+  <p class="detail-price">
+    <span class="mono">PRECIO</span>
+    <strong>{formatCLP(origin.priceCLP)}</strong>
+  </p>
+
+  <Facts
+    items={[
+      { term: 'FORMATO', value: '200 ml' },
+      { term: 'ENVASADO', value: bottledOn },
+      { term: 'CONSERVACIÓN', value: 'Refrigerado' },
+    ]}
+  />
+
+  <a
+    class="detail-cta mono"
+    href={whatsappOrderUrl(origin)}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <span>PEDIR POR WHATSAPP</span>
+    <Arrow />
+  </a>
+</div>
+
+<style>
+  .detail-compra {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  .detail-compra[hidden] {
+    display: none;
+  }
+  .detail-price {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .detail-price .mono {
+    font-size: var(--text-sm);
+    letter-spacing: 0.08em;
+  }
+  .detail-price strong {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+  }
+  .detail-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    align-self: flex-start;
+    padding: var(--space-4) var(--space-5);
+    border: 2px solid var(--origin-ink);
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    box-shadow: 6px 6px 0 var(--origin-ink);
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .detail-cta:hover,
+  .detail-cta:focus-visible {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 var(--origin-ink);
+  }
+  .detail-cta:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 4px;
+  }
+  .detail-cta :global(svg) {
+    width: 1.1em;
+    height: 1.1em;
+    flex: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .detail-cta {
+      transition: none;
+    }
+  }
+</style>

@@ -1,300 +1,231 @@
 ---
-import '@fontsource/jetbrains-mono/latin-400.css';
-import '@fontsource/jetbrains-mono/latin-500.css';
-import '@fontsource/doto/latin-700.css';
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import Arrow from '../components/Arrow.astro';
-import BottleMasks from '../components/BottleMasks.astro';
 import Collection from '../components/Collection.astro';
-import Preparations from '../components/Preparations.astro';
-import { whatsappNumber } from '../data/origins';
+import KeepCold from '../components/KeepCold.astro';
+import Layout from '../layouts/Base.astro';
 import heroFlatlay from '../assets/hero-flatlay.jpg';
 import pause from '../assets/pause.jpeg';
 import coast from '../assets/coast.jpeg';
-import '../styles/global.css';
-const canonical = new URL('/', Astro.site);
-const socialImage = new URL('/social-cover.png', Astro.site);
+import { origins } from '../data/origins';
+
+const peru = origins.find((origin) => origin.id === 'peru')!;
+const colombia = origins.find((origin) => origin.id === 'colombia')!;
+
+// Hero title, one entry per line. Each word keeps its index for the stagger animation.
+const titleWords = [
+  ['Café', 'de', 'especialidad'],
+  ['en', 'frío.'],
+];
+let titleIndex = 0;
+const titleLines = titleWords.map((line) =>
+  line.map((word) => ({ word, index: titleIndex++ })),
+);
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Soft Brew Coffee. Cold brew de especialidad en botellines de 200 ml. Descubre Colombia y Perú."
-    />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href={canonical} />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="es_CL" />
-    <meta property="og:site_name" content="Soft Brew Coffee" />
-    <meta property="og:title" content="Soft Brew Coffee — El lado frío del café" />
-    <meta property="og:description" content="Dos orígenes. Café de especialidad en frío, en botellines de 200 ml." />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={socialImage} />
-    <meta property="og:image:alt" content="Soft Brew Coffee: café de especialidad, una nueva perspectiva." />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#E9E6DB" />
-    <link rel="icon" type="image/svg+xml" href="/brand/keep-cold.svg" />
-    <title>Soft Brew Coffee — El lado frío del café</title>
-    <script is:inline>document.documentElement.classList.add('js-reveal');</script>
-  </head>
-  <body>
-    <BottleMasks />
-    <a class="skip-link mono" href="#contenido">Saltar al contenido</a>
-    <div class="site-frame" id="inicio">
-      <header class="masthead">
-        <a class="masthead-brand" href="#inicio" aria-label="Soft Brew Coffee, inicio">
-          <img src="/brand/brew-symbol.svg" alt="" width="158" height="198" />
-        </a>
-        <span class="masthead-caption mono"
-          >CAFÉ DE ESPECIALIDAD / COLD BREW</span
-        >
-        <nav class="main-nav mono" aria-label="Navegación principal">
-          <a href="#origenes">LOS ORÍGENES <span aria-hidden="true">↓</span></a>
-          <a href="#lado-frio">EL LADO FRÍO <span aria-hidden="true">↓</span></a
-          >
-        </nav>
-      </header>
-
-      <main id="contenido">
-        <section class="spec" aria-labelledby="hero-title">
-          <h1 id="hero-title" class="spec-title">
-            <span class="line"><span class="word" style="--i:0">Café</span> <span class="word" style="--i:1">de</span> <span class="word" style="--i:2">especialidad</span></span>
-            <span class="line line-2"><span class="word" style="--i:3">en</span> <span class="word" style="--i:4">frío.</span></span>
-          </h1>
-          <figure class="spec-photo">
-            <Image
-              src={heroFlatlay}
-              alt="Dos botellines de cold brew, Perú y Colombia, sobre una mesa de madera con granos de café"
-              width={1372}
-              widths={[480, 800, 1200, 1372]}
-              sizes="(max-width: 700px) 100vw, 58vw"
-              format="webp"
-              quality={88}
-              loading="eager"
-              fetchpriority="high"
-            />
-            <figcaption class="mono"><span><span class="accent-number">02</span> ORÍGENES</span> <span>200 ML · COLD BREW</span></figcaption>
-          </figure>
-          <div class="spec-data">
-            <div class="spec-cell spec-volume">
-              <p class="mono">FORMATO</p>
-              <p class="spec-figure"><strong class="count" data-count="200">200</strong><span>ML</span></p>
-              <p class="mono">BOTELLÍN · COLD BREW</p>
-            </div>
-            <div class="spec-row">
-              <div class="spec-cell">
-                <p class="mono"><span class="accent-number">02</span> PERÚ</p>
-                <p class="spec-figure"><strong class="count" data-count="16">16</strong><span>H</span></p>
-                <p class="mono">INFUSIÓN</p>
-              </div>
-              <div class="spec-cell">
-                <p class="mono"><span class="accent-number">01</span> COLOMBIA</p>
-                <p class="spec-figure"><strong class="count" data-count="24">24</strong><span>H</span></p>
-                <p class="mono">INFUSIÓN</p>
-              </div>
-            </div>
-            <div class="spec-cell spec-intro">
-              <p>Una nueva perspectiva para el café de especialidad.</p>
-              <a href="#origenes" class="spec-link" aria-label="Descubrir los dos orígenes"><Arrow direction="down" /></a>
-            </div>
-            <div class="spec-cell spec-brand">
-              <img src="/brand/soft-brew-coffee.svg" alt="Soft Brew Coffee" width="601" height="429" />
-              <p class="mono">BUEN CAFÉ. EN FRÍO.</p>
-            </div>
-          </div>
-        </section>
-
-        <Collection />
-
-        <section class="pause" id="lado-frio" aria-labelledby="pause-title">
-          <div class="pause-heading">
-            <p class="mono eyebrow">OTRA PERSPECTIVA</p><h2 id="pause-title">
-              Café de especialidad.<br /><span>Otra forma de disfrutarlo.</span>
-            </h2><Arrow class="pause-arrow" />
-          </div>
-          <div class="pin" data-pin>
-          <div class="pin-stage">
-          <div class="pause-moments">
-            <article class="moment">
-              <figure class="moment-photo">
-                <Image
-                  src={pause}
-                  width={1200}
-                  alt="Botellín de Perú junto a un vaso con hielo y una rodaja de cítrico, sobre una mesa de madera"
-                  widths={[480, 800, 1200]}
-                  sizes="(max-width: 700px) 100vw, 60vw"
-                  format="webp"
-                  quality={85}
-                  loading="lazy"
-                />
-                <figcaption class="mono"><span>PERÚ</span><span>SOFT BREW COFFEE</span></figcaption>
-              </figure>
-              <div class="moment-copy moment-copy-peru">
-                <span class="moment-num">01</span>
-                <h3>Tarde de avellana</h3>
-                <p>Infusión de 16 horas. Avellana tostada y chocolate, servido con hielo y una rodaja de limón.</p>
-                <p class="mono moment-meta">Avellana tostada · Chocolate · 200 ml</p>
-              </div>
-            </article>
-            <article class="moment moment-reverse">
-              <div class="moment-copy moment-copy-colombia">
-                <span class="moment-num">02</span>
-                <h3>Para llevar</h3>
-                <p>Infusión de 24 horas. Chocolate dulce y caramelo en 200 ml, para el bolso, la playa o el camino.</p>
-                <p class="mono moment-meta">Chocolate dulce · Caramelo · 200 ml</p>
-              </div>
-              <figure class="moment-photo">
-                <Image
-                  src={coast}
-                  width={1000}
-                  alt="Botellín de Colombia en una mano frente al mar"
-                  widths={[480, 800, 1000]}
-                  sizes="(max-width: 700px) 100vw, 40vw"
-                  format="webp"
-                  quality={85}
-                  loading="lazy"
-                />
-                <figcaption class="mono"><span>COLOMBIA</span><span>AL LADO DEL MAR</span></figcaption>
-              </figure>
-            </article>
-          </div>
-          </div>
-          </div>
-        </section>
-        <Preparations />
-      </main>
-
-      <footer class="footer" id="instagram">
-        <div class="footer-header mono">
-          <span>CAFÉ DE ESPECIALIDAD / EN FRÍO</span>
-          <span><span class="accent-number">02</span> ORÍGENES · <span class="accent-number">200</span> ML</span>
-        </div>
-        <div class="footer-feature">
-          <div class="footer-statement">
-            <p class="mono">UNA PAUSA DIFERENTE.</p>
-            <h2>EL CAFÉ<br />SE TOMA<br />SU TIEMPO.</h2>
-            <p class="footer-note">Cold brew para disfrutar el momento.</p>
-          </div>
-        </div>
-        <div class="footer-marquee" aria-label="Buen café. En frío.">
-          <div class="footer-marquee-track">
-            <p class="footer-marquee-group">
-              <span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span>
-            </p>
-            <p class="footer-marquee-group" aria-hidden="true">
-              <span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span><span>BUEN CAFÉ EN FRÍO</span>
-            </p>
-          </div>
-        </div>
-        <div class="footer-bottom mono">
-          <div class="footer-brand">
-            <img
-              src="/brand/soft-brew-coffee.svg"
-              alt="Soft Brew Coffee: logotipo original con tetera y V60"
-              width="601"
-              height="429"
-              loading="lazy"
-            />
-          </div>
-          <div class="footer-social">
-            <span>CONTACTO</span>
-            <a
-              class="instagram-link mono"
-              href={`https://wa.me/${whatsappNumber}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              WHATSAPP <Arrow />
-            </a>
-          </div>
-          <a class="footer-return" href="#inicio">VOLVER ARRIBA <span aria-hidden="true">↑</span></a>
-        </div>
-      </footer>
-    </div>
-    <script>
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-      // Count-up for the spec numbers.
-      const counters = document.querySelectorAll<HTMLElement>('[data-count]');
-      const runCount = (el: HTMLElement) => {
-        const target = Number(el.dataset.count);
-        if (reduceMotion.matches) return;
-        const duration = 1100;
-        const start = performance.now();
-        el.textContent = '0';
-        const step = (now: number) => {
-          const t = Math.min((now - start) / duration, 1);
-          const eased = 1 - Math.pow(1 - t, 3);
-          el.textContent = String(Math.round(target * eased));
-          if (t < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      };
-      // Count only when the figures scroll into view (matters on phones, where they sit below the fold).
-      if (!reduceMotion.matches) {
-        counters.forEach((el) => {
-          el.textContent = '0';
-        });
-        const counterObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (!entry.isIntersecting) return;
-              runCount(entry.target as HTMLElement);
-              counterObserver.unobserve(entry.target);
-            });
-          },
-          { threshold: 0.5 },
-        );
-        counters.forEach((el) => counterObserver.observe(el));
+<Layout path="/">
+  <section class="spec" aria-labelledby="hero-title">
+    <h1 id="hero-title" class="spec-title">
+      {
+        titleLines.map((line, lineIndex) => (
+          <span class:list={['line', lineIndex > 0 && 'line-2']}>
+            {line.map(({ word, index }, position) => (
+              <>
+                {position > 0 && ' '}
+                <span class="word" style={`--i:${index}`}>
+                  {word}
+                </span>
+              </>
+            ))}
+          </span>
+        ))
       }
+    </h1>
+    <KeepCold class="hero-snow" />
+    <figure class="spec-photo">
+      <Picture
+        src={heroFlatlay}
+        alt="Dos botellines de cold brew, Perú y Colombia, sobre una mesa de madera con granos de café"
+        width={1372}
+        widths={[480, 800, 1200, 1372]}
+        sizes="(max-width: 700px) 67vw, 58vw"
+        formats={['avif', 'webp']}
+        fallbackFormat="webp"
+        quality={60}
+        loading="eager"
+        fetchpriority="high"
+      />
+    </figure>
+    <div class="spec-data">
+      <div class="spec-cell spec-volume">
+        <p class="mono">FORMATO</p>
+        <p class="spec-figure">
+          <strong class="count" data-count="200">200</strong><span>ML</span>
+        </p>
+        <p class="mono">BOTELLÍN · COLD BREW</p>
+      </div>
+      <div class="spec-row">
+        <div class="spec-cell">
+          <p class="mono"><span class="accent-number">01</span> PERÚ</p>
+          <p class="spec-figure">
+            <strong class="count" data-count="16">16</strong><span>H</span>
+          </p>
+          <p class="mono">INFUSIÓN</p>
+        </div>
+        <div class="spec-cell">
+          <p class="mono"><span class="accent-number">02</span> COLOMBIA</p>
+          <p class="spec-figure">
+            <strong class="count" data-count="24">24</strong><span>H</span>
+          </p>
+          <p class="mono">INFUSIÓN</p>
+        </div>
+      </div>
+      <div class="spec-cell spec-intro">
+        <p>Una nueva perspectiva para el café de especialidad.</p>
+        <a
+          href="#origenes"
+          class="spec-link"
+          aria-label="Descubrir los dos orígenes"><Arrow direction="down" /></a
+        >
+      </div>
+      <div class="spec-cell spec-brand">
+        <img
+          src="/brand/soft-brew-coffee.svg"
+          alt="Soft Brew Coffee"
+          width="601"
+          height="429"
+        />
+        <p class="mono">BUEN CAFÉ. EN FRÍO.</p>
+      </div>
+    </div>
+  </section>
 
-      // Start the title reveal after the first paint, so the transition runs.
-      window.setTimeout(() => document.documentElement.classList.add('is-ready'), 120);
+  <Collection />
 
-      // Pinned horizontal scroll for the moments, desktop only.
-      const pin = document.querySelector<HTMLElement>('[data-pin]');
-      const track = pin?.querySelector<HTMLElement>('.pause-moments');
-      const desktop = window.matchMedia('(min-width: 701px)');
+  <section class="bento-section" id="lado-frio" aria-labelledby="pause-title">
+    <div class="bento-heading">
+      <p class="mono eyebrow">OTRA PERSPECTIVA</p>
+      <h2 id="pause-title">Dos formas de <span>tomarlo.</span></h2>
+      <a class="bento-heading-link mono" href="/preparaciones/"
+        >VER PREPARACIONES <Arrow /></a
+      >
+    </div>
+    <div class="bento">
+      <figure class="bento-tile bento-photo bento-peru-photo" style="--d:0ms">
+        <div class="bento-photo-frame">
+          <Picture
+            src={pause}
+            width={1200}
+            alt="Botellín de Perú junto a un vaso con hielo y una rodaja de cítrico, sobre una mesa de madera"
+            widths={[480, 800, 1200]}
+            sizes="(max-width: 700px) 67vw, 58vw"
+            formats={['avif', 'webp']}
+            fallbackFormat="webp"
+            quality={60}
+            loading="lazy"
+          />
+        </div>
+      </figure>
+      <div class="bento-tile bento-copy bento-peru-copy" style="--d:120ms">
+        <span class="moment-num">01</span>
+        <h3>Tarde de avellana</h3>
+        <p>
+          Infusión de {peru.infusionHours} horas. {peru.notes.join(', ')},
+          servido con hielo y una rodaja de limón.
+        </p>
+        <p class="mono bento-meta">{peru.notes.join(' · ')} · 200 ml</p>
+      </div>
+      <div class="bento-tile bento-copy bento-colombia-copy" style="--d:0ms">
+        <span class="moment-num">02</span>
+        <h3>Para llevar</h3>
+        <p>
+          Infusión de {colombia.infusionHours} horas. Para el bolso, la playa o el
+          camino.
+        </p>
+        <p class="mono bento-meta">{colombia.notes.join(' · ')} · 200 ml</p>
+      </div>
+      <figure
+        class="bento-tile bento-photo bento-colombia-photo"
+        style="--d:120ms"
+      >
+        <div class="bento-photo-frame">
+          <Picture
+            src={coast}
+            width={1000}
+            alt="Botellín de Colombia en una mano frente al mar"
+            widths={[480, 800, 1000]}
+            sizes="(max-width: 700px) 67vw, 58vw"
+            formats={['avif', 'webp']}
+            fallbackFormat="webp"
+            quality={60}
+            loading="lazy"
+          />
+        </div>
+      </figure>
+      <div class="bento-tile bento-data" style="--d:0ms">
+        <div>
+          <p class="bento-figure">{peru.infusionHours}<span>H</span></p><p
+            class="mono"
+          >
+            PERÚ · INFUSIÓN
+          </p>
+        </div>
+        <div>
+          <p class="bento-figure">{colombia.infusionHours}<span>H</span></p><p
+            class="mono"
+          >
+            COLOMBIA · INFUSIÓN
+          </p>
+        </div>
+      </div>
+      <a class="bento-tile bento-cta" href="/#origenes" style="--d:120ms">
+        <span class="mono">ELEGIR ORIGEN</span>
+        <span class="bento-cta-word">Pedir</span>
+        <Arrow />
+      </a>
+    </div>
+  </section>
+</Layout>
 
-      const layout = () => {
-        if (!pin || !track) return;
-        const enabled = desktop.matches && !reduceMotion.matches;
-        pin.classList.toggle('is-pinned', enabled);
-        if (!enabled) {
-          pin.style.height = '';
-          track.style.transform = '';
-          return;
-        }
-        const scrollable = Math.max(track.scrollWidth - window.innerWidth, 0);
-        pin.style.height = `${scrollable + window.innerHeight}px`;
-        update();
-      };
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-      const update = () => {
-        if (!pin || !track || !pin.classList.contains('is-pinned')) return;
-        const scrollable = Math.max(track.scrollWidth - window.innerWidth, 1);
-        const range = pin.offsetHeight - window.innerHeight;
-        const progress = Math.min(Math.max(-pin.getBoundingClientRect().top / range, 0), 1);
-        track.style.transform = `translate3d(${-progress * scrollable}px, 0, 0)`;
-      };
-
-      let ticking = false;
-      window.addEventListener('scroll', () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          update();
-          ticking = false;
+  // Count-up for the spec numbers, starting when they scroll into view.
+  const counters = document.querySelectorAll<HTMLElement>('[data-count]');
+  const runCount = (el: HTMLElement) => {
+    const target = Number(el.dataset.count);
+    if (reduceMotion.matches) return;
+    const duration = 1100;
+    const start = performance.now();
+    el.textContent = '0';
+    const step = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = String(Math.round(target * eased));
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  if (!reduceMotion.matches) {
+    counters.forEach((el) => {
+      el.textContent = '0';
+    });
+    const counterObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          runCount(entry.target as HTMLElement);
+          counterObserver.unobserve(entry.target);
         });
-      }, { passive: true });
-      window.addEventListener('resize', layout);
-      desktop.addEventListener('change', layout);
-      reduceMotion.addEventListener('change', layout);
-      layout();
-    </script>
-  </body>
-</html>
+      },
+      { threshold: 0.5 },
+    );
+    counters.forEach((el) => counterObserver.observe(el));
+  }
+
+  // Start the title reveal after the first paint, so the transition runs.
+  window.setTimeout(
+    () => document.documentElement.classList.add('is-ready'),
+    120,
+  );
+</script>
