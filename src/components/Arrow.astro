@@ -1,18 +1,24 @@
 ---
 interface Props {
-  direction?: 'down' | 'diagonal';
-  class?: string;
+  direction?: 'down' | 'diagonal' | 'right';
 }
-const { direction = 'diagonal', class: className } = Astro.props;
+const { direction = 'diagonal' } = Astro.props;
+// Down and right share one drawing: a straight shaft with a chevron head, the same weight.
+// The diagonal keeps its own drawing. Straight strokes sit on half pixels at small sizes and
+// read lighter, so these two are drawn a touch heavier.
+const paths = {
+  down: 'M24 8v30M14 28l10 10 10-10',
+  right: 'M8 24h30M28 14l10 10-10 10',
+  diagonal: 'M10 38 38 10M10 10h28v28',
+};
+const path = paths[direction];
+const strokeWidth = direction === 'diagonal' ? 3 : 3.6;
 ---
 
 <svg
-  class={className}
   viewBox="0 0 48 48"
   fill="none"
   aria-hidden="true"
-  style={direction === 'down' ? 'transform:rotate(135deg)' : undefined}
 >
-  <path d="M10 38 38 10M10 10h28v28" stroke="currentColor" stroke-width="3"
-  ></path>
+  <path d={path} stroke="currentColor" stroke-width={strokeWidth}></path>
 </svg>
