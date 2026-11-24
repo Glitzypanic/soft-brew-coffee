@@ -1,0 +1,91 @@
+---
+import type { Preparation } from '../data/preparations';
+
+interface Props {
+  prep: Preparation;
+}
+const { prep } = Astro.props;
+---
+
+<dl class="recipe-ingredients mono">
+  {
+    prep.ingredients.map((ingredient) => (
+      <div>
+        <dt>{ingredient.item}</dt>
+        <dd>{ingredient.amount}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<ol class="recipe-steps">
+  {
+    prep.steps.map((step, index) => (
+      <li style={`--i:${index}`}>
+        <span class="recipe-n" aria-hidden="true">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <span>{step}</span>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  /* Receipt style: item and amount joined by a dotted leader. */
+  .recipe-ingredients {
+    display: grid;
+    margin: 0 0 var(--space-5);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+  }
+  .recipe-ingredients > div {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: 0.35rem 0;
+    overflow-wrap: anywhere;
+  }
+  .recipe-ingredients dt {
+    display: flex;
+    flex: 1;
+    gap: var(--space-2);
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+  }
+  .recipe-ingredients dt::after {
+    content: '';
+    flex: 1;
+    min-width: var(--space-4);
+    margin-bottom: 0.3em;
+    border-bottom: 2px dotted var(--ink);
+  }
+  .recipe-ingredients dd {
+    min-width: 0;
+    margin: 0;
+    text-align: right;
+  }
+  /* Steps: a compact numbered mono list under a dashed tear line. */
+  .recipe-steps {
+    display: grid;
+    margin: 0;
+    padding: var(--space-4) 0 0;
+    border-top: 1.5px dashed var(--ink);
+    list-style: none;
+    font-family: var(--mono);
+    font-size: var(--text-md);
+    line-height: 1.45;
+  }
+  .recipe-steps li {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    align-items: start;
+    min-width: 0;
+    padding: var(--space-2) 0;
+    overflow-wrap: anywhere;
+  }
+  .recipe-n {
+    font-weight: 700;
+  }
+</style>

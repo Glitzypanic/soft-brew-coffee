@@ -1,17 +1,15 @@
 ---
-import { preparations } from '../data/preparations';
+// The four glasses side by side are the selector: the chosen one rises onto a disc in its
+// colour and its recipe shows in a band below, one recipe at a time.
+import {
+  preparations,
+  pairingLabel,
+  shortName,
+  prepVars,
+} from '../data/preparations';
+import PrepRecipe from './PrepRecipe.astro';
 
-interface Props {
-  headingTag?: 'h1' | 'h2';
-}
-const { headingTag: Heading = 'h2' } = Astro.props;
-const CardHeading = Heading === 'h1' ? 'h2' : 'h3';
-
-const tags = {
-  colombia: 'IDEAL CON COLOMBIA',
-  peru: 'IDEAL CON PERÚ',
-  ambos: 'CON CUALQUIER ORIGEN',
-} as const;
+const nn = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 <section class="preps" id="preparaciones" aria-labelledby="preps-title">
@@ -19,167 +17,217 @@ const tags = {
     <p class="mono eyebrow">
       PREPARACIONES / <span class="accent-number">01—04</span>
     </p>
-    <Heading id="preps-title">Cómo tomarlo.</Heading>
+    <h1 id="preps-title">Cómo tomarlo.</h1>
     <p>Un botellín como base. Cuatro formas de servirlo, sin herramientas.</p>
   </div>
 
-  <div class="preps-grid">
+  <div class="glasses" role="group" aria-label="Elige una preparación">
     {
-      preparations.map((prep, index) => (
-        <article class="prep" style={`--prep-accent:${prep.accent}`}>
-          <header class="prep-head">
-            <span class="prep-num">{String(index + 1).padStart(2, '0')}</span>
-            <span class="mono prep-tag">{tags[prep.pairsWith]}</span>
-          </header>
-          <CardHeading class="prep-name">{prep.name}</CardHeading>
-          <dl class="prep-ingredients mono">
-            {prep.ingredients.map((ingredient) => (
-              <div>
-                <dt>{ingredient.item}</dt>
-                <dd>{ingredient.amount}</dd>
-              </div>
-            ))}
-          </dl>
-          <ol class="prep-steps">
-            {prep.steps.map((step) => (
-              <li>{step}</li>
-            ))}
-          </ol>
-        </article>
+      preparations.map((prep, i) => (
+        <button
+          type="button"
+          class="glass"
+          aria-pressed={i === 0 ? 'true' : 'false'}
+          aria-controls={`recipe-${prep.id}`}
+          style={prepVars(prep)}
+        >
+          <span class="glass-disc">
+            <img
+              src={prep.art.src}
+              width={prep.art.width}
+              height={prep.art.height}
+              alt=""
+              decoding="async"
+            />
+          </span>
+          <span class="glass-label">
+            <span class="mono">{nn(i)}</span>
+            {shortName(prep.name)}
+          </span>
+        </button>
       ))
     }
   </div>
+
+  {
+    preparations.map((prep, i) => (
+      <div
+        class="band"
+        id={`recipe-${prep.id}`}
+        hidden={i !== 0}
+        style={prepVars(prep)}
+      >
+        <div class="band-head">
+          <p class="mono">
+            {nn(i)} / {pairingLabel[prep.pairsWith]}
+          </p>
+          <h2>{prep.name}</h2>
+        </div>
+        <div>
+          <PrepRecipe prep={prep} />
+        </div>
+      </div>
+    ))
+  }
 </section>
+
+<script>
+  const glasses = [...document.querySelectorAll<HTMLButtonElement>('.glass')];
+  for (const glass of glasses) {
+    glass.addEventListener('click', () => {
+      for (const g of glasses) {
+        const on = g === glass;
+        g.setAttribute('aria-pressed', String(on));
+        document.getElementById(g.getAttribute('aria-controls')!)!.hidden = !on;
+      }
+    });
+  }
+</script>
 
 <style>
   .preps {
-    background: var(--grey);
-    color: var(--ink);
-    border-bottom: var(--rule);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    padding: var(--space-8) var(--gutter);
   }
   .preps-heading {
-    padding: var(--space-8) var(--gutter);
-    border-bottom: var(--rule);
+    margin-bottom: var(--space-8);
   }
-  .preps-heading h2 {
+  .preps-heading h1 {
+    margin: 0.65rem 0;
     overflow-wrap: anywhere;
     font-size: clamp(2.5rem, 5vw, 5.5rem);
     font-weight: 600;
     letter-spacing: -0.055em;
-    margin: 0.65rem 0;
   }
   .preps-heading > p:last-child {
     font-size: var(--text-lg);
     line-height: 1.5;
   }
-  .preps-grid {
+
+  .glasses {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .prep {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
-    padding: var(--space-8) var(--gutter);
-    background: var(--prep-accent);
-    color: var(--ink);
-    border-right: var(--rule);
-    border-bottom: var(--rule);
-    min-width: 0;
-  }
-  .prep:nth-child(2n) {
-    border-right: 0;
-  }
-  .prep-head {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--space-4);
-    border-bottom: var(--rule);
-    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-7);
   }
-  .prep-num {
-    font-family: var(--sans);
-    font-size: clamp(3.5rem, 6vw, 6rem);
-    font-weight: 600;
-    line-height: 0.8;
-    letter-spacing: -0.06em;
+  .glass {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
   }
-  .prep-tag {
+  .glass-disc {
+    display: grid;
+    place-items: center;
+    width: min(100%, 13rem);
+    aspect-ratio: 1;
+    border: 1.5px dashed var(--ink);
+    border-radius: 50%;
+    transition:
+      background 0.25s ease,
+      translate 0.35s var(--ease-spring);
+  }
+  .glass-disc img {
+    width: 62%;
+    height: auto;
+    transition: transform 0.35s var(--ease-spring);
+  }
+  .glass:hover .glass-disc {
+    background: color-mix(in srgb, var(--bg) 50%, transparent);
+  }
+  .glass[aria-pressed='true'] .glass-disc {
+    border-style: solid;
+    background: var(--bg);
+    translate: 0 -0.5rem;
+  }
+  .glass[aria-pressed='true'] .glass-disc img {
+    filter: var(--art-edge);
+    transform: rotate(-6deg) scale(1.08);
+  }
+  .glass:focus-visible {
+    outline: none;
+  }
+  .glass:focus-visible .glass-disc {
+    outline: 2px solid var(--ink);
+    outline-offset: 4px;
+  }
+  .glass-label {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+    /* Scales with the screen so "Affogato" fits under its glass on narrow phones. */
+    font-size: clamp(0.75rem, 3.5vw, 1.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .glass-label .mono {
+    font-size: var(--text-sm);
+  }
+  .glass[aria-pressed='true'] .glass-label {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
+  }
+
+  /* The band takes the drink's colours; --ink follows so the recipe's rules match its text. */
+  .band {
+    --ink: var(--fg);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: var(--space-8);
+    padding: var(--space-8);
+    border-radius: var(--space-6);
+    background: var(--bg);
+    color: var(--fg);
+    animation: band-in 0.4s ease;
+  }
+  .band[hidden] {
+    display: none;
+  }
+  .band-head p {
     font-size: var(--text-sm);
     letter-spacing: 0.08em;
-    text-align: right;
   }
-  .prep-name {
-    overflow-wrap: anywhere;
-    font-size: clamp(1.8rem, 3.2vw, 3rem);
-    font-weight: 600;
-    letter-spacing: -0.05em;
-    line-height: 1;
+  .band-head h2 {
+    margin: var(--space-3) 0 0;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.055em;
   }
-  /* Ingredients take the free height, so steps line up at the bottom of every card. */
-  .prep-ingredients {
-    display: grid;
-    align-content: start;
-    flex: 1;
-    margin: 0;
-    font-size: 0.8rem;
+  @keyframes band-in {
+    from {
+      opacity: 0;
+      translate: 0 0.75rem;
+    }
   }
-  .prep-ingredients > div {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-4);
-    padding: 0.6rem 0;
-    border-bottom: 1px dashed var(--ink);
+  @media (prefers-reduced-motion: reduce) {
+    .band {
+      animation: none;
+    }
+    .glass-disc,
+    .glass-disc img {
+      transition: none;
+    }
   }
-  .prep-ingredients > div:last-child {
-    border-bottom: var(--rule);
-  }
-  .prep-ingredients dt {
-    letter-spacing: 0.06em;
-  }
-  .prep-ingredients dd {
-    margin: 0;
-    text-align: right;
-  }
-  .prep-steps {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    counter-reset: step;
-    display: grid;
-    gap: 0.6rem;
-    font-size: var(--text-base);
-    line-height: 1.4;
-  }
-  .prep-steps li {
-    counter-increment: step;
-    display: grid;
-    grid-template-columns: 2.2rem minmax(0, 1fr);
-    overflow-wrap: anywhere;
-    gap: var(--space-2);
-  }
-  .prep-steps li::before {
-    content: counter(step, decimal-leading-zero);
-    font-family: var(--mono);
-    font-size: var(--text-sm);
-    padding-top: 0.2rem;
-  }
-  @media (max-width: 900px) {
-    .preps-grid {
+  @media (max-width: 760px) {
+    .glasses {
+      gap: var(--space-2);
+    }
+    .glass-label {
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .band {
       grid-template-columns: minmax(0, 1fr);
-    }
-    .prep {
-      border-right: 0;
-    }
-  }
-  @media (max-width: 700px) {
-    .prep {
-      padding: var(--space-7) var(--space-5);
-    }
-    .preps-heading {
-      padding: var(--space-7) var(--space-5);
+      gap: var(--space-5);
+      padding: var(--space-6) var(--space-5);
     }
   }
 </style>

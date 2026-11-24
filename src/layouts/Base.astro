@@ -69,7 +69,8 @@ const socialImage = new URL('/social-cover.png', Astro.site);
         >
         <nav class="main-nav mono" aria-label="Navegación principal">
           <a href="/#origenes">LOS ORÍGENES <Arrow direction="down" /></a>
-          <a href="/preparaciones/">PREPARACIONES <Arrow direction="right" /></a>
+          <a href="/preparaciones/">PREPARACIONES <Arrow direction="right" /></a
+          >
         </nav>
         <a class="masthead-cta mono" href="/#origenes">PEDIR <Arrow /></a>
       </header>
@@ -88,17 +89,36 @@ const socialImage = new URL('/social-cover.png', Astro.site);
           >
         </div>
         <div class="footer-feature">
-          <div class="footer-statement">
-            <p class="mono">UNA PAUSA DIFERENTE.</p>
-            <div class="footer-headline">
-              <h2>EL CAFÉ<br />SE TOMA<br />SU TIEMPO.</h2>
-              <p class="footer-note">Cold brew para disfrutar el&nbsp;momento.</p>
-            </div>
-            <a class="footer-link mono" href="/preparaciones/">
-              <span>VER PREPARACIONES</span>
-              <Arrow />
+          <p class="footer-kicker mono">UNA PAUSA DIFERENTE.</p>
+          <h2>EL CAFÉ<br />SE TOMA<br />SU TIEMPO.</h2>
+          <a class="footer-link mono" href="/preparaciones/">
+            <span>VER PREPARACIONES</span>
+            <Arrow />
+          </a>
+          <p class="footer-note">Cold brew para disfrutar el&nbsp;momento.</p>
+          <div class="footer-social mono">
+            <span>CONTACTO</span>
+            <a
+              class="contact-link mono"
+              href={`https://wa.me/${whatsappNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WHATSAPP <Arrow />
             </a>
           </div>
+          <div class="footer-brand">
+            <img
+              src="/brand/soft-brew-coffee.svg"
+              alt="Soft Brew Coffee: logotipo original con tetera y V60"
+              width="601"
+              height="429"
+              loading="lazy"
+            />
+          </div>
+          <a class="footer-return mono" href="/#inicio"
+            >VOLVER ARRIBA <span aria-hidden="true">↑</span></a
+          >
         </div>
         <div class="footer-marquee">
           <div class="footer-marquee-track">
@@ -113,31 +133,6 @@ const socialImage = new URL('/social-cover.png', Astro.site);
               ><span>BUEN CAFÉ EN FRÍO</span>
             </p>
           </div>
-        </div>
-        <div class="footer-bottom mono">
-          <div class="footer-brand">
-            <img
-              src="/brand/soft-brew-coffee.svg"
-              alt="Soft Brew Coffee: logotipo original con tetera y V60"
-              width="601"
-              height="429"
-              loading="lazy"
-            />
-          </div>
-          <div class="footer-social">
-            <span>CONTACTO</span>
-            <a
-              class="contact-link mono"
-              href={`https://wa.me/${whatsappNumber}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              WHATSAPP <Arrow />
-            </a>
-          </div>
-          <a class="footer-return" href="/#inicio"
-            >VOLVER ARRIBA <span aria-hidden="true">↑</span></a
-          >
         </div>
       </footer>
     </div>

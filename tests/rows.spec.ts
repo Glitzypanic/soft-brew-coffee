@@ -56,9 +56,9 @@ test('items in each row sit on one baseline', async ({ page }) => {
       ],
     };
     if (window.innerWidth >= 701) {
-      // On phones these items stack into columns, so only the wide layout shares one floor.
+      // On phones these items stack, so only the wide layout shares one floor.
+      // The wordmark sits at the top of its column, away from this row.
       result.footer = [
-        logoInk(q('.footer-brand img')),
         textBaseline(q('.footer-social .contact-link')),
         textBaseline(q('.footer-return')),
       ];
