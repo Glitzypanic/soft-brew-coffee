@@ -69,12 +69,17 @@ test('no horizontal overflow across phone, tablet and desktop widths', async ({
   }
 });
 
-test('the preparations section lists four recipes', async ({ page }) => {
+test('the preparations page shows one recipe at a time', async ({ page }) => {
   await page.goto('/preparaciones/');
-  await expect(page.locator('.prep')).toHaveCount(4);
-  await expect(page.locator('.prep-name').first()).toHaveText(
-    'Cold brew tonic',
-  );
+  await expect(page.locator('.glass')).toHaveCount(4);
+  await expect(page.locator('#recipe-tonic')).toBeVisible();
+  await expect(page.locator('#recipe-affogato')).toBeHidden();
+
+  const affogato = page.getByRole('button', { name: /Affogato/ });
+  await affogato.click();
+  await expect(affogato).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#recipe-affogato')).toBeVisible();
+  await expect(page.locator('#recipe-tonic')).toBeHidden();
 });
 
 test('the footer offers WhatsApp contact and no Instagram link', async ({
